@@ -1,0 +1,29 @@
+{
+    "items": {
+        "Wooden Sword": {
+            "type": "melee",
+            "icon": "𐃉",
+            "description": "A wooden training sword that is often given to squires.",
+            "rarity": "Common",
+            "base_value": 5.0,
+            "attack_value": 5
+        },
+        "Wooden Shield": {
+            "type": "shield",
+            "icon": "🛡",
+            "description": "A training shield to practise blocking attacks.",
+            "rarity": "Common",
+            "base_value": 5.0,
+            "blocking_value": 10
+        },
+        "tattered rags": {
+            "type": "armor",
+            "icon": "🧥",
+            "description": "At some point it was a decent jacket, but time has not been kind to it.",
+            "rarity": "Common",
+            "base_value": 5.0,
+            "health_bonus": 5
+        }
+    }
+}
+
