@@ -16,13 +16,29 @@
             "base_value": 5.0,
             "blocking_value": 10
         },
-        "tattered rags": {
+        "Tattered Rags": {
             "type": "armor",
             "icon": "🧥",
             "description": "At some point it was a decent jacket, but time has not been kind to it.",
             "rarity": "Common",
-            "base_value": 5.0,
+            "base_value": 3.0,
             "health_bonus": 5
+        },
+        "Torn Leather Trousers": {
+            "type": "Legs",
+            "icon": "👖",
+            "description": "How many nails do you have to get stuck on to make this many holes?",
+            "rarity": "Common",
+            "base_value": 2.0,
+            "health_bonus": 2
+        },
+        "Worn-out sandals": {
+            "type": "boots",
+            "icon": "👞",
+            "description": "At least it protects against pebbles when walking.",
+            "rarity": "Common",
+            "base_value": 1,
+            "health_bonus": 1
         }
     }
 }

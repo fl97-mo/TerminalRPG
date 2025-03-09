@@ -11,14 +11,6 @@ The goal is to create an **interactive world** where players can:
 - Interact with **NPCs** 👩‍🌾
 - Gain experience and get stronger over time 💪
 
-## 🧾 Dev Diary
-### Day 1:
-Created: 
-- **`main.py`**:          Controls the game logic.
-- **`character.py`**:     Represents all characters.
-- **`item.py`**:          Represent all items.
-- **`items.json`**:       Contains all created items. 
-
 ## 🧙 Installation
 1. Clone this repository:
    ```bash
@@ -29,3 +21,28 @@ Created:
 3. Run the game:
    ```bash
    python main.py
+
+
+## 🧾 Dev Diary
+### Day 1:
+Created: 
+- **`main.py`**:              Controls the game logic.
+- **`character.py`**:         Represents all characters.
+- **`item.py`**:              Represent all items.
+- **`items.json`**:           Contains all created items.
+Implemented:
+
+✅ **Creation of Item Objects and Hero Object (Player)**
+
+### Day 2:
+Created: 
+- **`initializeGame.py`**:    Handles the game initializing and the intro.
+- **`dialog.py`**:            Methods to display dialogs in RPG Styles
+- **`dialogues.json`**:       Contains all dialogs and options to response.
+
+Implemented:
+
+✅ **Logic for NPC conversation with those scenarios:**
+- NPC talks in monologue
+- NPC asks for user input
+- NPC reacts to user input
