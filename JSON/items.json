@@ -1,45 +1,71 @@
 {
     "items": {
-        "Wooden Sword": {
-            "type": "melee",
-            "icon": "𐃉",
-            "description": "A wooden training sword that is often given to squires.",
-            "rarity": "Common",
-            "base_value": 5.0,
-            "attack_value": 5
-        },
-        "Wooden Shield": {
-            "type": "shield",
-            "icon": "🛡",
-            "description": "A training shield to practise blocking attacks.",
-            "rarity": "Common",
-            "base_value": 5.0,
-            "blocking_value": 10
-        },
-        "Tattered Rags": {
-            "type": "armor",
-            "icon": "🧥",
-            "description": "At some point it was a decent jacket, but time has not been kind to it.",
-            "rarity": "Common",
-            "base_value": 3.0,
-            "health_bonus": 5
-        },
-        "Torn Leather Trousers": {
-            "type": "Legs",
-            "icon": "👖",
-            "description": "How many nails do you have to get stuck on to make this many holes?",
-            "rarity": "Common",
-            "base_value": 2.0,
-            "health_bonus": 2
-        },
-        "Worn-out sandals": {
-            "type": "boots",
-            "icon": "👞",
-            "description": "At least it protects against pebbles when walking.",
-            "rarity": "Common",
-            "base_value": 1,
-            "health_bonus": 1
-        }
+      "Wooden Sword": {
+        "type": "weapon",
+        "icon": "𐃉",
+        "description": "A wooden training sword that is often given to squires.",
+        "rarity": "Common",
+        "base_value": 5.0,
+        "attack_value": 5,
+        "stackable": false,
+        "stack_limit": 1,
+        "equip_slots": ["Left Hand", "Right Hand"]
+      },
+      "Wooden Shield": {
+        "type": "shield",
+        "icon": "🛡",
+        "description": "A training shield to practise blocking attacks.",
+        "rarity": "Common",
+        "base_value": 5.0,
+        "blocking_value": 10,
+        "stackable": false,
+        "stack_limit": 1,
+        "equip_slots": ["Left Hand", "Right Hand"]
+      },
+      "Tattered Rags": {
+        "type": "armor",
+        "icon": "🧥",
+        "description": "At some point it was a decent jacket, but time has not been kind to it.",
+        "rarity": "Common",
+        "base_value": 3.0,
+        "health_bonus": 5,
+        "stackable": false,
+        "stack_limit": 1,
+        "equip_slots": ["Armor"]
+      },
+      "Torn Leather Trousers": {
+        "type": "legs",
+        "icon": "👖",
+        "description": "How many nails do you have to get stuck on to make this many holes?",
+        "rarity": "Common",
+        "base_value": 2.0,
+        "health_bonus": 2,
+        "stackable": false,
+        "stack_limit": 1,
+        "equip_slots": ["Legs"]
+      },
+      "Worn-out sandals": {
+        "type": "boots",
+        "icon": "👞",
+        "description": "At least it protects against pebbles when walking.",
+        "rarity": "Common",
+        "base_value": 1,
+        "health_bonus": 1,
+        "stackable": false,
+        "stack_limit": 1,
+        "equip_slots": ["Boots"]
+      },
+      "Healing Potion": {
+        "type": "consumable",
+        "icon": "🧪",
+        "description": "Heals your wounds a bit.",
+        "rarity": "Uncommon",
+        "base_value": 10.0,
+        "stackable": true,
+        "stack_limit": 10,
+        "equip_slots": [],
+        "heal_value": 10
+      }
     }
-}
-
+  }
+  

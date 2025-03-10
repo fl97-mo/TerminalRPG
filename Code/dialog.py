@@ -3,7 +3,6 @@ import os
 import time
 import msvcrt
 
-
 class Dialog:
     @staticmethod
     def load_dialogues():
@@ -14,7 +13,9 @@ class Dialog:
         except FileNotFoundError:
             print("dialogues.json not found!")
             return {}
-
+        except json.JSONDecodeError:
+            print("dialogues.json is corrupted!")
+            return {}
 
     @staticmethod
     def clear_screen():
@@ -22,7 +23,7 @@ class Dialog:
         os.system('cls' if os.name == 'nt' else 'clear')
 
     @staticmethod
-    def show(text, delay=0.02):
+    def show(text, delay=0.01):
         """Shows dialog letter by letter, but skips if Enter is pressed"""
         full_text = ""
         for char in text:
@@ -33,13 +34,12 @@ class Dialog:
             print(char, end='', flush=True)
             full_text += char
             time.sleep(delay)
-
         print()
 
     @staticmethod
     def wait_for_input():
         """Ask for enter to continue"""
-        input("\n▶️ Press Enter to continue")
+        input("\n▶️  Press Enter to continue")
 
     @staticmethod
     def play(dialogue):

@@ -1,13 +1,14 @@
 from initializeGame import create_new_game
-from character import *
+from menu import GameMenu
 
 def main():
     hero = create_new_game()
     print(f"Welcome to TerminalRPG {hero.name}!")
-    print(f"That's it so far, the game is still being worked on, "
-        "but I hope you're just as excited about the result as I am. ")
-    
-    hero.showStats()
+    print("That's it so far, the game is still being worked on.")
+
+    GameMenu.game_loop(hero)
 
 if __name__ == "__main__":
     main()
+
+
