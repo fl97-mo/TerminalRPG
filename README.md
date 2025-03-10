@@ -24,15 +24,20 @@ The goal is to create an **interactive world** where players can:
 
 
 ## 🧾 Dev Diary
-### Day 1:
+### Day 3:
 Created: 
-- **`main.py`**:              Controls the game logic.
-- **`character.py`**:         Represents all characters.
-- **`item.py`**:              Represent all items.
-- **`items.json`**:           Contains all created items.
-Implemented:
+- **`validations.py`**:       Input validations for diffrent scenarios
+- **`menu.py`**:              Prints and manges different menuoptions
+- **`backpack.py`**:          Manages backpack and logic
 
-✅ **Creation of Item Objects and Hero Object (Player)**
+Implemented:
+✅ **Inventory management**
+- Hero can equip/dequip/consume/discard/inspect items
+- When equiped/consumed items give specific Bonus
+- Two Systems: 1. **Equipment** 2. **Backpack**
+- Euipment: Weapons, armors, etc. can only be equiped at defined place.
+- Backpack: Storage for all non equiped items. 20 Slots Max.
+- Some items are stackable (up to 64), some are not 
 
 ### Day 2:
 Created: 
@@ -46,3 +51,15 @@ Implemented:
 - NPC talks in monologue
 - NPC asks for user input
 - NPC reacts to user input
+
+### Day 1:
+Created: 
+- **`main.py`**:              Controls the game logic.
+- **`character.py`**:         Represents all characters.
+- **`item.py`**:              Represent all items.
+- **`items.json`**:           Contains all created items.
+
+Implemented:
+
+✅ **Creation of Item Objects and Hero Object (Player)**
+
