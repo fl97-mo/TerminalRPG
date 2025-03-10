@@ -26,14 +26,15 @@ The goal is to create an **interactive world** where players can:
 ## 🧾 Dev Diary
 ### Day 3:
 Created: 
-- **`validations.py`**:       Input validations for diffrent scenarios
-- **`menu.py`**:              Prints and manges different menuoptions
-- **`backpack.py`**:          Manages backpack and logic
+- **`validations.py`**:       Input validations for different scenarios
+- **`menu.py`**:              Prints and manages different menu options
+- **`backpack.py`**:          Manages backpack logic
 
 Implemented:
+
 ✅ **Inventory management**
 - Hero can equip/dequip/consume/discard/inspect items
-- When equiped/consumed items give specific Bonus
+- When equiped/consumed items give specific bonuses
 - Two Systems: 1. **Equipment** 2. **Backpack**
 - Euipment: Weapons, armors, etc. can only be equiped at defined place.
 - Backpack: Storage for all non equiped items. 20 Slots Max.
