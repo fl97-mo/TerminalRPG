@@ -29,12 +29,6 @@ class Character:
               f"Stamina: {self.stamina} SP\n"
               f"Attack:  {self.attack} AP\n")
 
-
-from dialog import Dialog
-import time
-from validations import get_validated_choice
-from backpack import Backpack
-
 class Character:
     def __init__(self, name, health, stamina, attack, level, guild):
         self.name = name
