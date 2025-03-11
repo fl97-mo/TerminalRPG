@@ -62,7 +62,7 @@ def print_three_column_screen(left_lines, middle_lines, right_lines,
                               left_title="Left", middle_title="Middle", right_title="Right"):
     width_left = 30
     width_middle = 40
-    width_right = 40
+    width_right = 34
 
     top_left   = pad_ansi_text(f" {left_title} ", width_left)
     top_middle = pad_ansi_text(f" {middle_title} ", width_middle)

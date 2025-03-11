@@ -43,7 +43,7 @@ class AsciiMap:
                     style_names=style_names
                 )
             rendered_map += "\n"
-        return rendered_map
+        return rendered_map.rstrip("\n")
 
     def print_banner_above_map(self, text_line1, text_line2):
         max_text_len = max(len(text_line1), len(text_line2))
