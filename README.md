@@ -5,9 +5,8 @@ A terminal-based RPG adventure. Currently in development!
 ## About the Project
 TerminalRPG is a medieval **text-based role-playing game** that runs in the terminal.  
 The goal is to create an **interactive world** where players can:
-- Explore an **open world** 🏘️
+- Explore an the **world** 🏘️
 - Engage in **battles** ⚔️
-- Manage an **inventory** 👜
 - Interact with **NPCs** 👩‍🌾
 - Gain experience and get stronger over time 💪
 
