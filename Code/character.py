@@ -25,7 +25,6 @@ class Character:
         self.guild = guild
 
     def showStats(self):
-<<<<<<< HEAD
         hero_formatted = Colors.color_text(self.name, color_name="Cyan", style_names="Bold")
         print(f"Name:    {hero_formatted}\n"
             f"Level:   {self.level}\n"
@@ -33,31 +32,6 @@ class Character:
             f"Health:  {self.health} HP\n"
             f"Stamina: {self.stamina} SP\n"
             f"Attack:  {self.attack} AP\n")
-=======
-        print(f"Name:    {self.name}\n"
-              f"Level:   {self.level}\n"
-              f"Guild:   {self.guild}\n"
-              f"Health:  {self.health} HP\n"
-              f"Stamina: {self.stamina} SP\n"
-              f"Attack:  {self.attack} AP\n")
-
-class Character:
-    def __init__(self, name, health, stamina, attack, level, guild):
-        self.name = name
-        self.health = health
-        self.stamina = stamina
-        self.attack = attack
-        self.level = level
-        self.guild = guild
-
-    def showStats(self):
-        print(f"Name:    {self.name}\n"
-              f"Level:   {self.level}\n"
-              f"Guild:   {self.guild}\n"
-              f"Health:  {self.health} HP\n"
-              f"Stamina: {self.stamina} SP\n"
-              f"Attack:  {self.attack} AP\n")
->>>>>>> d0c44a6c7dfa407a95ef24068622ce63c8a3e8df
 
 
 class Hero(Character):
