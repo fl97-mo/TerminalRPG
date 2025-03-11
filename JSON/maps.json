@@ -1,0 +1,20 @@
+{
+    "maps": {
+      "darkwood_clearing": {
+        "theme": "temperate forest",
+        "data": [
+          "TTTTTTTTTTT##   ~~~╔╝  .TTTTTTTTTT",
+          "TTTTTTTTTTTT#  ~~~ ║  ..TTTTTTTTTT",
+          "TTTTTTTTT##   ~~~  ║   ..TTTTTTTTT",
+          "TTTTTTT###   ~~~   ║    ....TTTTTT",
+          "T╔══════════≡≡≡≡═══╝       ...TTTT",
+          "═╝TTTTT###  ~~~  ####    X  TTTTTT",
+          "TTTTTT##  ~~~  #TTTTT####..TTTTTTT",
+          "TTTTT## ~~~   #TTTTTTTTTTTTTTTTTTT",
+          "TTT## ~~~  ###TTTTTTTTTTTTTTTTTTTT",
+          "TT#~~~~     #TTTTTTTTTTTTTTTTTTTTT"
+        ]
+      }
+    }
+  }
+  

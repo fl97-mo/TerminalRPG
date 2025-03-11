@@ -1,0 +1,32 @@
+{
+  "locations": {
+    "loc_darkwood_clearing": {
+      "name": "Clearing in the green forest",
+      "type": "Meadow",
+      "buildings": ["tent_old_man"],
+      "npcs": ["npc_old_man"],
+      "player_start": true,
+      
+      "faction": "Kingdom of Castellan",
+      "description": "A serene meadow within the forest, known for its vibrant flowers and relaxing atmosphere.",
+      "map_id": "darkwood_clearing"
+    }
+  },
+  "buildings": {
+    "tent_old_man": {
+      "name": "Old man's camp site",
+      "type": "Tent",
+      "faction": "Kingdom of Castellan",
+      "description": "A small campsite with a worn tent and a faintly glowing campfire.",
+      "location": "loc_darkwood_clearing",
+      "containers": ["chest_old_man"],
+      "map_id": "darkwood_clearing"
+    }
+  },
+  "containers": {
+    "chest_old_man": {
+      "name": "Worn Chest",
+      "contains": ["Wooden Sword", "Healing Potion"]
+    }
+  }
+}

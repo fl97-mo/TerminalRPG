@@ -19,12 +19,10 @@ class Dialog:
 
     @staticmethod
     def clear_screen():
-        """Clears screen for dialogs"""
         os.system('cls' if os.name == 'nt' else 'clear')
 
     @staticmethod
     def show(text, delay=0.01):
-        """Shows dialog letter by letter, but skips if Enter is pressed"""
         full_text = ""
         for char in text:
             if msvcrt.kbhit() and msvcrt.getch() == b'\r':
@@ -38,12 +36,10 @@ class Dialog:
 
     @staticmethod
     def wait_for_input():
-        """Ask for enter to continue"""
         input("\n▶️  Press Enter to continue")
 
     @staticmethod
     def play(dialogue):
-        """shows list of dialog with effects"""
         for line in dialogue:
             Dialog.clear_screen()
             Dialog.show(line)

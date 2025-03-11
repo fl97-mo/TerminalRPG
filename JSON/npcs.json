@@ -1,0 +1,12 @@
+{
+    "npcs": {
+      "npc_old_man": {
+        "name": "Old Man",
+        "role": "Introduction",
+        "attitude": "Neutral",
+        "faction": "Kingdom of Castellan",
+        "dialogue_id": "Old Man"
+      }
+    }
+  }
+  

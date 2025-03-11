@@ -4,6 +4,10 @@ import re
 from validations import get_validated_choice
 from backpack import Backpack
 from item import get_rarity_color, RESET_COLOR
+from colors import Colors
+from colors import Colors
+from npc_manager import NPCManager
+
 
 ansi_escape_pattern = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
 
@@ -11,7 +15,6 @@ def visible_length(text):
     no_ansi = ansi_escape_pattern.sub('', text)
     return len(no_ansi)
 
-
 class Character:
     def __init__(self, name, health, stamina, attack, level, guild):
         self.name = name
@@ -22,35 +25,13 @@ class Character:
         self.guild = guild
 
     def showStats(self):
-        print(f"Name:    {self.name}\n"
-              f"Level:   {self.level}\n"
-              f"Guild:   {self.guild}\n"
-              f"Health:  {self.health} HP\n"
-              f"Stamina: {self.stamina} SP\n"
-              f"Attack:  {self.attack} AP\n")
-
-
-from dialog import Dialog
-import time
-from validations import get_validated_choice
-from backpack import Backpack
-
-class Character:
-    def __init__(self, name, health, stamina, attack, level, guild):
-        self.name = name
-        self.health = health
-        self.stamina = stamina
-        self.attack = attack
-        self.level = level
-        self.guild = guild
-
-    def showStats(self):
-        print(f"Name:    {self.name}\n"
-              f"Level:   {self.level}\n"
-              f"Guild:   {self.guild}\n"
-              f"Health:  {self.health} HP\n"
-              f"Stamina: {self.stamina} SP\n"
-              f"Attack:  {self.attack} AP\n")
+        hero_formatted = Colors.color_text(self.name, color_name="Cyan", style_names="Bold")
+        print(f"Name:    {hero_formatted}\n"
+            f"Level:   {self.level}\n"
+            f"Guild:   {self.guild}\n"
+            f"Health:  {self.health} HP\n"
+            f"Stamina: {self.stamina} SP\n"
+            f"Attack:  {self.attack} AP\n")
 
 
 class Hero(Character):
@@ -68,7 +49,7 @@ class Hero(Character):
 
         self.level = level
         self.guild = guild
-
+        self.current_building = None
         self.inventory = inventory
         self.backpack = Backpack(capacity=20)
 
@@ -235,11 +216,11 @@ class Hero(Character):
             print(f"│{left_str}│{right_str}│")
 
         print("└" + "─" * eq_width + "┴" + "─" * bp_width + "┘")
-
 class NPC(Character):
-    def __init__(self, name, health, stamina, attack, level, guild, dialogues):
+    def __init__(self, name, health, stamina, attack, level, guild, dialogues, npc_id=None):
         super().__init__(name, health, stamina, attack, level, guild)
         self.dialogues = dialogues
+        self.npc_id = npc_id
 
     def talk(self, conversation, **kwargs):
         conv_key = str(conversation)
@@ -249,9 +230,15 @@ class NPC(Character):
             return None
         lines = [line.format(**kwargs) for line in conv_data.get("dialog", [])]
 
+        if self.npc_id:
+            npc_manager = NPCManager()
+            speaker_name = npc_manager.get_npc_name(self.npc_id)
+        else:
+            speaker_name = Colors.color_text(self.name, color_name="Bright White", style_names="Bold")
+
         for line in lines:
             Dialog.clear_screen()
-            print(f"{self.name}:")
+            print(f"{speaker_name}:")
             Dialog.show(line)
             Dialog.wait_for_input()
 
@@ -266,7 +253,7 @@ class NPC(Character):
                 valid_options=range(1, len(option_keys)+1)
             )
             chosen_key = option_keys[choice - 1]
-            hero_name = kwargs.get("hero_name", "Hero")
+            hero_name = Colors.color_text(kwargs.get('hero_name', 'Hero'), color_name="Cyan", style_names="Bold")
             answer_text = options[chosen_key]
             Dialog.clear_screen()
             print(f"{hero_name}:")
@@ -277,7 +264,7 @@ class NPC(Character):
                 followup_lines = [line.format(**kwargs) for line in followup_data.get("dialog", [])]
                 for line in followup_lines:
                     Dialog.clear_screen()
-                    print(f"{self.name}:")
+                    print(f"{speaker_name}:")
                     Dialog.show(line)
                     Dialog.wait_for_input()
             return chosen_key
