@@ -41,13 +41,13 @@ Dialogues are dynamic and npc`s (or even the hero) react differently depending o
 There are (*will be*) many possible answers with different texts.
 ![Dialogs Screenshot](Screenshots/dialogs.png)
 
-Created: 
+Created:
+
 - **`menu.py`**:              Splitted into: `building_menu.py`, `dialog_menu.py`,
                               `game_menu.py`, for a better overview
 - **`asciimap.py`**:          Class to design and paint maps
 - **`colors.py`**:            Contains ~ 50 asni colors, backgrounds and formats
 - **`location_manager.py`**:  Controls the movement of a character from one place to another
-- **`colors.py`**:            Contains ~ 50 asni colors, backgrounds and formats
 - **`map_manager.py`**:       Reads and draws map and banner
 - **`npc_manager.py`**:       Loads npc's and paints attitude towards hero
 - **`ui_helpers.py`**:        Methods for a clear design of the ui
