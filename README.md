@@ -27,8 +27,6 @@ The goal is to create an **interactive world** where players can:
 
 ### Day 4:
 
-Screenshots:
-
 ### Inventory
 2-column inventory with stats, equipment, backpack and inventory management options
 ![Inventory Screenshot](Screenshots/Inventory.png)
@@ -42,7 +40,6 @@ On the right, the map visualised with the colours. (it is the same map twice, as
 Dialogues are dynamic and npc`s (or even the hero) react differently depending on the input. 
 There are (*will be*) many possible answers with different texts.
 ![Dialogs Screenshot](Screenshots/dialogs.png)
-
 
 Created: 
 - **`menu.py`**:              Splitted into: `building_menu.py`, `dialog_menu.py`,
