@@ -25,6 +25,10 @@ The goal is to create an **interactive world** where players can:
 
 ## 🧾 Dev Diary
 
+### Day 5:
+- Improved Map drawing and peformance
+- Designed Location of "Old Man" for the intro and created a fitting theme
+
 ### Day 4:
 
 ### Inventory
