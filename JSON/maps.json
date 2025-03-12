@@ -14,7 +14,22 @@
           "TTT## ~~~  ###TTTTTTTTTTTTTTTTTTTT",
           "TT#~~~~     #TTTTTTTTTTTTTTTTTTTTT"
         ]
-      }
-    }
+      },
+      "darkwood_old_man_tent": {
+        "theme": "temperate forest tent",
+        "data": [
+          "  *                    .          ",
+          "         ,                        ",
+          "             ╔═══════════════════╗",
+          "             ║      [¤]          ║",
+          "     Ø &                         ║",
+          "             ║h¬              __¶║",
+          "     .  *    ╚═══════════════════╝",
+          "                     .    *       ",
+          "      . ##       ,                ",
+          "   ########                       "
+        ]
+      }    
+    } 
   }
   

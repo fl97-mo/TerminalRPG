@@ -17,7 +17,30 @@ class AsciiMap:
             "╔": ("Light Gray", "Forest Green BG", None),      # street s-e
             "║": ("Light Gray", "Forest Green BG", None),      # street s-n
             "≡": ("Peru", "Sienna BG", None)                   # bridge w-e
-        }
+        },
+        "temperate forest tent": {
+            "Ø": ("Coral", "Forest Green BG", None),           # Fire
+            "&": ("Khaki", "Forest Green BG", None),           # Old Man
+            "¤": ("Gold", "Maroon BG", None),                  # chest lock
+            "]": ("Chocolate", "Maroon BG", None),             # chest1
+            " ": ("Mint", "Forest Green BG", None),            # grass
+            "[": ("Chocolate", "Maroon BG", None),             # chest2
+            "═": ("Beige", "Forest Green BG", None),           # Tent w-e
+            "╝": ("Beige", "Forest Green BG", None),           # Tent w-n
+            "╔": ("Beige", "Forest Green BG", None),           # Tent s-e
+            "║": ("Beige", "Forest Green BG", None),           # Tent s-n
+            "╗": ("Beige", "Forest Green BG", None),           # Tent
+            "╚": ("Beige", "Forest Green BG", None),           # Tent
+            ".": ("Plum", "Forest Green BG", None),            # Flower purple
+            ",": ("White", "Forest Green BG", None),           # flower red    
+            "*": ("Bright Yellow", "Forest Green BG", None),   # flower yellow
+            "¶": ("White", "Forest Green BG", None),           # bed1
+            "_": ("White", "Forest Green BG", None),           # bed2         
+            "h": ("Maroon", "Forest Green BG", None),          # chair in tent  
+            "¬": ("Maroon", "Forest Green BG", None),          # table in tent
+            "#": ("Bright Green", "Forest Green BG", None)     # bushes          
+        }        
+
     }
     
     def __init__(self, map_data, theme="temperate forest") -> None:

@@ -20,7 +20,7 @@
       "description": "A small campsite with a worn tent and a faintly glowing campfire.",
       "location": "loc_darkwood_clearing",
       "containers": ["chest_old_man"],
-      "map_id": "darkwood_clearing"
+      "map_id": "darkwood_old_man_tent"
     }
   },
   "containers": {
