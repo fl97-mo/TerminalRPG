@@ -3,13 +3,16 @@ from item import ItemLoader
 from dialog import Dialog
 from validations import get_validated_name
 from location_manager import LocationManager
+import logging
 
-def create_new_game():
+logger = logging.getLogger(__name__)
+
+def create_new_game() -> Hero:
     locations = LocationManager()
     start_location_id, start_location = locations.get_start_location()
     
     if not start_location:
-        print("Error: No starting location found!")
+        logger.error("Error: No starting location found!")
         return None
     
     all_items = ItemLoader.load_items_from_json()
@@ -28,7 +31,6 @@ def create_new_game():
     dialogues = Dialog.load_dialogues()
     old_man_dialogues = dialogues.get("Old Man", {})
     old_man = NPC("Old Man", 100, 100, 10, 1, None, old_man_dialogues, npc_id="npc_old_man")
-
 
     old_man.talk(1)
     hero_name = get_validated_name("Enter your hero's name: ")

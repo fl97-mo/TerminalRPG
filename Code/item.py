@@ -1,7 +1,9 @@
 import json
 import os
+from typing import Dict
+from colors import Colors
 
-RARITY_COLORS = {
+RARITY_COLORS: Dict[str, str] = {
     "common": "\033[90m",
     "uncommon": "\033[92m",
     "rare": "\033[96m",
@@ -10,12 +12,12 @@ RARITY_COLORS = {
 }
 RESET_COLOR = "\033[0m"
 
-def get_rarity_color(rarity_str):
+def get_rarity_color(rarity_str: str) -> str:
     return RARITY_COLORS.get(rarity_str.lower(), "")
 
 class Item:
-    def __init__(self, icon, name, description, rarity, base_value,
-                 stackable=True, stack_limit=64, equip_slots=None):
+    def __init__(self, icon: str, name: str, description: str, rarity: str, base_value: float,
+                 stackable: bool = True, stack_limit: int = 64, equip_slots=None):
         self.icon = icon
         self.name = name
         self.description = description
@@ -25,29 +27,20 @@ class Item:
         self.stack_limit = stack_limit
         self.equip_slots = equip_slots if equip_slots else []
 
-    def inspect_Item(self):
+    def inspect_Item(self) -> None:
         color_code = get_rarity_color(self.rarity)
         print(f"{color_code}{self.icon} {self.name} ({self.rarity}){RESET_COLOR}\n"
               f"📜 {self.description}\n"
               f"💰 Value: {self.base_value} 🪙\n")
 
 class Consumable(Item):
-    def __init__(self, icon, name, description, rarity, base_value,
-                 stackable=True, stack_limit=64, equip_slots=None, heal_value=0):
-        super().__init__(
-            icon=icon,
-            name=name,
-            description=description,
-            rarity=rarity,
-            base_value=base_value,
-            stackable=stackable,
-            stack_limit=stack_limit,
-            equip_slots=equip_slots
-        )
+    def __init__(self, icon: str, name: str, description: str, rarity: str, base_value: float,
+                 stackable: bool = True, stack_limit: int = 64, equip_slots=None, heal_value: int = 0):
+        super().__init__(icon, name, description, rarity, base_value, stackable, stack_limit, equip_slots)
         self.is_consumable = True
         self.heal_value = heal_value
 
-    def inspect_Item(self):
+    def inspect_Item(self) -> None:
         super().inspect_Item()
         print("🍴 This item can be consumed.")
         if self.heal_value > 0:
@@ -56,93 +49,53 @@ class Consumable(Item):
             print()
 
 class Weapon(Item):
-    def __init__(self, icon, name, description, rarity, base_value,
-                 attack_value, stackable=True, stack_limit=64, equip_slots=None):
-        super().__init__(
-            icon=icon,
-            name=name,
-            description=description,
-            rarity=rarity,
-            base_value=base_value,
-            stackable=stackable,
-            stack_limit=stack_limit,
-            equip_slots=equip_slots
-        )
+    def __init__(self, icon: str, name: str, description: str, rarity: str, base_value: float,
+                 attack_value: int, stackable: bool = True, stack_limit: int = 64, equip_slots=None):
+        super().__init__(icon, name, description, rarity, base_value, stackable, stack_limit, equip_slots)
         self.attack_value = attack_value
 
-    def inspect_Item(self):
+    def inspect_Item(self) -> None:
         super().inspect_Item()
         print(f"⚔️ Attack Bonus: {self.attack_value} AP\n")
 
 class Shield(Item):
-    def __init__(self, icon, name, description, rarity, base_value,
-                 blocking_value, stackable=True, stack_limit=64, equip_slots=None):
-        super().__init__(
-            icon=icon,
-            name=name,
-            description=description,
-            rarity=rarity,
-            base_value=base_value,
-            stackable=stackable,
-            stack_limit=stack_limit,
-            equip_slots=equip_slots
-        )
+    def __init__(self, icon: str, name: str, description: str, rarity: str, base_value: float,
+                 blocking_value: int, stackable: bool = True, stack_limit: int = 64, equip_slots=None):
+        super().__init__(icon, name, description, rarity, base_value, stackable, stack_limit, equip_slots)
         self.blocking_value = blocking_value
 
-    def inspect_Item(self):
+    def inspect_Item(self) -> None:
         super().inspect_Item()
         print(f"🛡 Defense Bonus: {self.blocking_value} DP\n")
+
 class Armor(Item):
-    def __init__(self, icon, name, description, rarity, base_value,
-                 health_bonus, stackable=True, stack_limit=64, equip_slots=None):
-        super().__init__(
-            icon=icon,
-            name=name,
-            description=description,
-            rarity=rarity,
-            base_value=base_value,
-            stackable=stackable,
-            stack_limit=stack_limit,
-            equip_slots=equip_slots
-        )
+    def __init__(self, icon: str, name: str, description: str, rarity: str, base_value: float,
+                 health_bonus: int, stackable: bool = True, stack_limit: int = 64, equip_slots=None):
+        super().__init__(icon, name, description, rarity, base_value, stackable, stack_limit, equip_slots)
         self.health_bonus = health_bonus
 
-    def inspect_Item(self):
+    def inspect_Item(self) -> None:
         super().inspect_Item()
         print(f"❤️ Health Bonus: {self.health_bonus} HP\n")
 
 class Legs(Armor):
-    def __init__(self, icon, name, description, rarity, base_value,
-                 health_bonus, stackable=True, stack_limit=64, equip_slots=None):
-        super().__init__(
-            icon=icon,
-            name=name,
-            description=description,
-            rarity=rarity,
-            base_value=base_value,
-            health_bonus=health_bonus,
-            stackable=stackable,
-            stack_limit=stack_limit,
-            equip_slots=equip_slots
-        )
+    def __init__(self, icon: str, name: str, description: str, rarity: str, base_value: float,
+                 health_bonus: int, stackable: bool = True, stack_limit: int = 64, equip_slots=None):
+        super().__init__(icon, name, description, rarity, base_value, health_bonus, stackable, stack_limit, equip_slots)
 
 class ItemLoader:
     @staticmethod
-    def load_items_from_json():
+    def load_items_from_json() -> Dict[str, Item]:
         json_path = os.path.join(os.path.dirname(__file__), "../JSON/items.json")
-
         try:
             with open(json_path, "r", encoding="utf-8") as file:
                 data = json.load(file)
-
-            items_dict = {}
+            items_dict: Dict[str, Item] = {}
             for name, item_data in data["items"].items():
                 item_type = item_data["type"].lower()
-
                 stackable = item_data.get("stackable", True)
                 stack_limit = item_data.get("stack_limit", 64)
                 equip_slots = item_data.get("equip_slots", [])
-
                 if item_type == "weapon":
                     items_dict[name] = Weapon(
                         icon=item_data["icon"],
@@ -203,13 +156,10 @@ class ItemLoader:
                         stack_limit=stack_limit,
                         equip_slots=equip_slots
                     )
-
             return items_dict
-
         except FileNotFoundError:
             print("JSON file not found!")
             return {}
-
         except json.JSONDecodeError:
             print("JSON file is corrupted!")
             return {}

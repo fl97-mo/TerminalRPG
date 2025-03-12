@@ -1,26 +1,29 @@
 import json
 import os
+import logging
 from colors import Colors
 
-def load_npc_data():
+logger = logging.getLogger(__name__)
+
+def load_npc_data() -> dict:
     base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../JSON"))
     filepath = os.path.join(base_path, "npcs.json")
     try:
         with open(filepath, "r", encoding="utf-8") as file:
             return json.load(file)
     except FileNotFoundError:
-        print("npcs.json not found!")
+        logger.error("npcs.json not found!")
         return {}
     except json.JSONDecodeError:
-        print("npcs.json is corrupted!")
+        logger.error("npcs.json is corrupted!")
         return {}
 
 class NPCManager:
-    def __init__(self):
+    def __init__(self) -> None:
         data = load_npc_data()
-        self.npcs = data.get("npcs", {})
+        self.npcs: dict = data.get("npcs", {})
 
-    def get_npc_name(self, npc_id):
+    def get_npc_name(self, npc_id: str) -> str:
         npc_info = self.npcs.get(npc_id)
         if npc_info:
             name = npc_info["name"]
@@ -34,4 +37,3 @@ class NPCManager:
             color = attitude_colors.get(attitude, "Bright White")
             return Colors.color_text(name, color_name=color, style_names="Bold")
         return npc_id
-

@@ -7,20 +7,20 @@ from location_manager import LocationManager
 from npc_manager import NPCManager
 from map_manager import MapManager
 
-def look_around(hero):
+def look_around(hero) -> None:
     clear_screen()
     lm = LocationManager()
     npc_m = NPCManager()
     loc = lm.locations.get(hero.current_location, {})
     if loc:
         print_framed(f"{loc.get('name', hero.current_location)} ({loc.get('type', 'Unknown')})")
-        if "npcs" in loc and loc["npcs"]:
+        if loc.get("npcs"):
             print("People here:")
             for npc in loc["npcs"]:
                 print(" - " + npc_m.get_npc_name(npc))
         else:
             print("Nobody is here.")
-        if "buildings" in loc and loc["buildings"]:
+        if loc.get("buildings"):
             print("Buildings:")
             for building in loc["buildings"]:
                 if building in lm.buildings:
@@ -31,7 +31,7 @@ def look_around(hero):
         print("Unknown location.")
     input("Press Enter to continue...")
 
-def open_game_menu(hero):
+def open_game_menu(hero) -> None:
     lm = LocationManager()
     map_manager = MapManager()
 
@@ -53,7 +53,6 @@ def open_game_menu(hero):
             b_type = b_info.get("type", "Unknown")
             wrapped_desc = textwrap.wrap(f"Description: {b_desc}", width=40)
             middle_lines = [
-
                 f"Faction: {b_faction}",
                 f"Type: {b_type}"
             ]
@@ -63,10 +62,10 @@ def open_game_menu(hero):
             banner_line2 = ""
             if b_name:
                 wrapped_banner = textwrap.wrap(b_name, width=30)
-                if len(wrapped_banner) > 0:
+                if wrapped_banner:
                     banner_line1 = wrapped_banner[0]
-                if len(wrapped_banner) > 1:
-                    banner_line2 = wrapped_banner[1]
+                    if len(wrapped_banner) > 1:
+                        banner_line2 = wrapped_banner[1]
             if map_id:
                 ascii_map_obj = map_manager.create_ascii_map(map_id, banner_line1, banner_line2)
                 if ascii_map_obj:
@@ -103,10 +102,10 @@ def open_game_menu(hero):
             banner_line2 = ""
             if loc_name:
                 wrapped_banner = textwrap.wrap(loc_name, width=30)
-                if len(wrapped_banner) > 0:
+                if wrapped_banner:
                     banner_line1 = wrapped_banner[0]
-                if len(wrapped_banner) > 1:
-                    banner_line2 = wrapped_banner[1]
+                    if len(wrapped_banner) > 1:
+                        banner_line2 = wrapped_banner[1]
             if map_id:
                 ascii_map_obj = map_manager.create_ascii_map(map_id, banner_line1, banner_line2)
                 if ascii_map_obj:
@@ -149,7 +148,7 @@ def open_game_menu(hero):
             print("Invalid option.")
             input("Press Enter to continue...")
 
-def game_loop(hero):
+def game_loop(hero) -> None:
     clear_screen()
     print("Type 'm' to open the game menu, or 'q' to quit.")
     while True:

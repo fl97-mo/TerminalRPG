@@ -1,22 +1,19 @@
-from dialog import Dialog
 import time
 import re
 from validations import get_validated_choice
 from backpack import Backpack
 from item import get_rarity_color, RESET_COLOR
 from colors import Colors
-from colors import Colors
 from npc_manager import NPCManager
-
+from dialog import Dialog
 
 ansi_escape_pattern = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
 
-def visible_length(text):
-    no_ansi = ansi_escape_pattern.sub('', text)
-    return len(no_ansi)
+def visible_length(text: str) -> int:
+    return len(ansi_escape_pattern.sub('', text))
 
 class Character:
-    def __init__(self, name, health, stamina, attack, level, guild):
+    def __init__(self, name: str, health: int, stamina: int, attack: int, level: int, guild: str):
         self.name = name
         self.health = health
         self.stamina = stamina
@@ -24,18 +21,17 @@ class Character:
         self.level = level
         self.guild = guild
 
-    def showStats(self):
+    def showStats(self) -> None:
         hero_formatted = Colors.color_text(self.name, color_name="Cyan", style_names="Bold")
         print(f"Name:    {hero_formatted}\n"
-            f"Level:   {self.level}\n"
-            f"Guild:   {self.guild}\n"
-            f"Health:  {self.health} HP\n"
-            f"Stamina: {self.stamina} SP\n"
-            f"Attack:  {self.attack} AP\n")
-
+              f"Level:   {self.level}\n"
+              f"Guild:   {self.guild}\n"
+              f"Health:  {self.health} HP\n"
+              f"Stamina: {self.stamina} SP\n"
+              f"Attack:  {self.attack} AP\n")
 
 class Hero(Character):
-    def __init__(self, name, health, stamina, attack, level, guild, inventory):
+    def __init__(self, name: str, health: int, stamina: int, attack: int, level: int, guild: str, inventory: dict):
         super().__init__(name, health, stamina, attack, level, guild)
         self.base_health = health
         self.base_stamina = stamina
@@ -52,34 +48,28 @@ class Hero(Character):
         self.current_building = None
         self.inventory = inventory
         self.backpack = Backpack(capacity=20)
-
         self.gold = 50
         self.recalcStats()
 
-    def recalcStats(self):
+    def recalcStats(self) -> None:
         total_attack = self.base_attack
         total_health_bonus = 0
 
-        for slot_name, equipped_item in self.inventory.items():
-            if equipped_item:
-                if hasattr(equipped_item, "attack_value"):
-                    total_attack += equipped_item.attack_value
-                if hasattr(equipped_item, "health_bonus"):
-                    total_health_bonus += equipped_item.health_bonus
+        for slot_item in self.inventory.values():
+            if slot_item:
+                total_attack += getattr(slot_item, "attack_value", 0)
+                total_health_bonus += getattr(slot_item, "health_bonus", 0)
 
         self.attack = total_attack
         self.max_health = self.base_health + total_health_bonus
-
         if self.health > self.max_health:
             self.health = self.max_health
 
-    def heal(self, amount):
-        self.health += amount
-        if self.health > self.max_health:
-            self.health = self.max_health
+    def heal(self, amount: int) -> None:
+        self.health = min(self.health + amount, self.max_health)
 
-    def consume_item(self, item):
-        if hasattr(item, "is_consumable") and item.is_consumable:
+    def consume_item(self, item) -> None:
+        if getattr(item, "is_consumable", False):
             heal_val = getattr(item, "heal_value", 0)
             if heal_val > 0:
                 self.heal(heal_val)
@@ -89,47 +79,40 @@ class Hero(Character):
         else:
             print("This item is not consumable!")
 
-    def addToBackpack(self, item, quantity=1):
+    def addToBackpack(self, item, quantity: int = 1) -> bool:
         return self.backpack.add_item(item, quantity)
 
-    def removeFromBackpack(self, slot_index, quantity=1):
+    def removeFromBackpack(self, slot_index: int, quantity: int = 1) -> bool:
         return self.backpack.remove_item(slot_index, quantity)
 
-    def equip_item(self, new_item, target_slot):
+    def equip_item(self, new_item, target_slot: str) -> bool:
         old_item = self.inventory.get(target_slot)
         if old_item:
-            success = self.backpack.add_item(old_item, 1)
-            if not success:
+            if not self.backpack.add_item(old_item, 1):
                 print("Not enough space in the backpack to swap items!")
                 return False
         self.inventory[target_slot] = new_item
-
         self.recalcStats()
         return True
 
-    def unequip_item(self, slot_name):
+    def unequip_item(self, slot_name: str) -> bool:
         old_item = self.inventory.get(slot_name)
         if not old_item:
             print(f"No item in slot '{slot_name}'.")
             return False
-
-        success = self.backpack.add_item(old_item, 1)
-        if not success:
+        if not self.backpack.add_item(old_item, 1):
             print("Backpack is full. Can't unequip.")
             return False
-
         self.inventory[slot_name] = None
         self.recalcStats()
         return True
 
-    def showInventory(self):
-
+    def showInventory(self) -> None:
         print(f"HP: {self.health}/{self.max_health} | "
               f"SP: {self.stamina} | "
               f"Attack: {self.attack} | "
               f"Level: {self.level} | "
               f"Gold: {self.gold}")
-
         eq_slots = [
             ("E1", "Head"),
             ("E2", "Armor"),
@@ -143,20 +126,17 @@ class Hero(Character):
         ]
         equipment_lines = []
         for code, slotname in eq_slots:
-            it = self.inventory.get(slotname)
-            if it:
-                color = get_rarity_color(it.rarity)
-                item_name = f"{color}{it.name}{RESET_COLOR}"
+            item_obj = self.inventory.get(slotname)
+            if item_obj:
+                color = get_rarity_color(item_obj.rarity)
+                item_name = f"{color}{item_obj.name}{RESET_COLOR}"
             else:
                 item_name = "(none)"
             equipment_lines.append(f"[{code}] {slotname}: {item_name}")
 
-        def format_backpack_slot(idx):
+        def format_backpack_slot(idx: int) -> str:
             n = idx + 1
-            if n < 10:
-                return f"[{n}] "
-            else:
-                return f"[{n}]"
+            return f"[{n:2}]"
 
         rows = 10
         cols = 2
@@ -168,10 +148,10 @@ class Hero(Character):
                 if current_idx < len(self.backpack.slots):
                     slot_data = self.backpack.slots[current_idx]
                     if slot_data:
-                        it = slot_data["item"]
+                        item_obj = slot_data["item"]
                         qty = slot_data["quantity"]
-                        color = get_rarity_color(it.rarity)
-                        item_name_colored = f"{color}{it.name}{RESET_COLOR}"
+                        color = get_rarity_color(item_obj.rarity)
+                        item_name_colored = f"{color}{item_obj.name}{RESET_COLOR}"
                         row_data.append(f"{format_backpack_slot(current_idx)} {item_name_colored} x{qty}")
                     else:
                         row_data.append(f"{format_backpack_slot(current_idx)} (empty)")
@@ -184,14 +164,11 @@ class Hero(Character):
         bp_width = 60
         col_slot_width = 28
 
-        def pad_to_width(text, width):
-                    vis_len = visible_length(text)
-                    if vis_len < width:
-                        return text + " " * (width - vis_len)
-                    else:
-                        return text
+        def pad_to_width(text: str, width: int) -> str:
+            vis_len = visible_length(text)
+            return text + " " * max(0, width - vis_len)
 
-        def format_backpack_row(row_data):
+        def format_backpack_row(row_data) -> str:
             col1 = pad_to_width(row_data[0], col_slot_width)
             col2 = pad_to_width(row_data[1], col_slot_width)
             combined = col1 + col2
@@ -202,22 +179,17 @@ class Hero(Character):
         right_title = pad_to_width(" Backpack ", bp_width)
         print(f"│{left_title}│{right_title}│")
         print("├" + "─" * eq_width + "┼" + "─" * bp_width + "┤")
-
         max_lines = max(len(equipment_lines), rows)
         for i in range(max_lines):
             left_str = equipment_lines[i] if i < len(equipment_lines) else ""
-            right_str = ""
-            if i < rows:
-                row_data = backpack_matrix[i]
-                right_str = format_backpack_row(row_data)
-
+            right_str = format_backpack_row(backpack_matrix[i]) if i < rows else ""
             left_str = pad_to_width(left_str, eq_width)
             right_str = pad_to_width(right_str, bp_width)
             print(f"│{left_str}│{right_str}│")
-
         print("└" + "─" * eq_width + "┴" + "─" * bp_width + "┘")
+
 class NPC(Character):
-    def __init__(self, name, health, stamina, attack, level, guild, dialogues, npc_id=None):
+    def __init__(self, name: str, health: int, stamina: int, attack: int, level: int, guild: str, dialogues: dict, npc_id: str = None):
         super().__init__(name, health, stamina, attack, level, guild)
         self.dialogues = dialogues
         self.npc_id = npc_id

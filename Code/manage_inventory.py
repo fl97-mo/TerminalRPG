@@ -1,6 +1,7 @@
 from ui_helpers import clear_screen, print_framed
+from validations import get_validated_choice
 
-def open_backpack_menu(hero):
+def open_backpack_menu(hero) -> None:
     while True:
         clear_screen()
         hero.showInventory()
@@ -19,7 +20,7 @@ def open_backpack_menu(hero):
             print("Invalid option.")
             input("Press Enter to continue...")
 
-def use_item_in_backpack(hero):
+def use_item_in_backpack(hero) -> None:
     slot_str = input("Which slot do you want to use (1-20) or c to close: ").strip().lower()
     if slot_str == "c":
         return
@@ -80,7 +81,7 @@ def use_item_in_backpack(hero):
         print("Canceled.")
     input("Press Enter to continue...")
 
-def drop_item_from_backpack(hero):
+def drop_item_from_backpack(hero) -> None:
     slot_str = input("Which slot to discard from (1-20) or c to close: ").strip().lower()
     if slot_str == "c":
         return
@@ -119,7 +120,7 @@ def drop_item_from_backpack(hero):
     print(f"Discarded {discard_count}x {item.name}.")
     input("Press Enter to continue...")
 
-def manage_equipment_slot(hero, slot_name):
+def manage_equipment_slot(hero, slot_name: str) -> None:
     clear_screen()
     item = hero.inventory.get(slot_name)
     if not item:
@@ -141,7 +142,7 @@ def manage_equipment_slot(hero, slot_name):
         print("Canceled.")
     input("Press Enter to continue...")
 
-def manage_backpack_slot(hero, slot_index):
+def manage_backpack_slot(hero, slot_index: int) -> None:
     clear_screen()
     slot = hero.backpack.slots[slot_index]
     if not slot:
@@ -212,7 +213,7 @@ def manage_backpack_slot(hero, slot_index):
         print("Canceled.")
     input("Press Enter to continue...")
 
-def manage_inventory(hero):
+def manage_inventory(hero) -> None:
     while True:
         clear_screen()
         hero.showInventory()

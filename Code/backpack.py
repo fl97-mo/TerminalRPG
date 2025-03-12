@@ -1,15 +1,12 @@
-
 class Backpack:
-    def __init__(self, capacity=20):
+    def __init__(self, capacity: int = 20) -> None:
         self.capacity = capacity
         self.slots = [None] * capacity
 
-    def add_item(self, item, quantity=1):
-
+    def add_item(self, item, quantity: int = 1) -> bool:
         if item.stackable:
             quantity_left = quantity
-            for i in range(self.capacity):
-                slot = self.slots[i]
+            for slot in self.slots:
                 if slot and slot["item"].name == item.name:
                     max_can_stack = item.stack_limit - slot["quantity"]
                     if max_can_stack > 0:
@@ -18,7 +15,6 @@ class Backpack:
                         quantity_left -= amount_to_add
                         if quantity_left <= 0:
                             return True
-            
             while quantity_left > 0:
                 free_index = self._find_free_slot()
                 if free_index == -1:
@@ -37,31 +33,28 @@ class Backpack:
                 added_any = True
             return added_any
 
-    def remove_item(self, slot_index, quantity=1):
+    def remove_item(self, slot_index: int, quantity: int = 1) -> bool:
         if slot_index < 0 or slot_index >= self.capacity:
             return False
-
         slot = self.slots[slot_index]
         if not slot:
             return False
-
         if slot["quantity"] <= quantity:
             self.slots[slot_index] = None
         else:
             slot["quantity"] -= quantity
-
         return True
 
-    def _find_free_slot(self):
-        for i in range(self.capacity):
-            if self.slots[i] is None:
+    def _find_free_slot(self) -> int:
+        for i, slot in enumerate(self.slots):
+            if slot is None:
                 return i
         return -1
 
-    def is_full(self):
+    def is_full(self) -> bool:
         return all(slot is not None for slot in self.slots)
 
-    def show_backpack(self):
+    def show_backpack(self) -> None:
         print("\n======== Backpack ========")
         for idx, slot in enumerate(self.slots):
             if slot:

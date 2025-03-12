@@ -4,7 +4,7 @@ from location_manager import LocationManager
 from item import ItemLoader
 from map_manager import MapManager
 
-def open_container(hero, container_info, items_data):
+def open_container(hero, container_info: dict, items_data: dict) -> None:
     clear_screen()
     print_framed("Opening " + container_info.get("name", "Unknown Container"))
     if not container_info.get("contains"):
@@ -50,7 +50,7 @@ def open_container(hero, container_info, items_data):
             clear_screen()
             print_framed("Opening " + container_info.get("name", "Unknown Container"))
 
-def enter_building(hero):
+def enter_building(hero) -> None:
     clear_screen()
     lm = LocationManager()
     map_manager = MapManager()
@@ -61,10 +61,7 @@ def enter_building(hero):
         print("You are at an unknown location.")
         input("Press Enter to continue...")
         return
-    location_buildings = []
-    for b_id, b_info in buildings_data.items():
-        if b_info.get("location") == hero.current_location:
-            location_buildings.append((b_id, b_info))
+    location_buildings = [(b_id, b_info) for b_id, b_info in buildings_data.items() if b_info.get("location") == hero.current_location]
     if not location_buildings:
         print("There are no buildings here.")
         input("Press Enter to continue...")
@@ -121,10 +118,10 @@ def enter_building(hero):
         banner_line1 = ""
         banner_line2 = ""
         wrapped_banner = textwrap.wrap(b_name, width=30)
-        if len(wrapped_banner) > 0:
+        if wrapped_banner:
             banner_line1 = wrapped_banner[0]
-        if len(wrapped_banner) > 1:
-            banner_line2 = wrapped_banner[1]
+            if len(wrapped_banner) > 1:
+                banner_line2 = wrapped_banner[1]
         if building_map_id:
             ascii_map_obj = map_manager.create_ascii_map(building_map_id, banner_line1, banner_line2)
             if ascii_map_obj:

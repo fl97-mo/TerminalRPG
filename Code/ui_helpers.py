@@ -4,10 +4,10 @@ import textwrap
 
 ANSI_ESCAPE_PATTERN = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
 
-def clear_screen():
+def clear_screen() -> None:
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def print_framed(title):
+def print_framed(title: str) -> None:
     border_len = max(40, len(title) + 6)
     print("┌" + "─" * (border_len - 2) + "┐")
     margin = (border_len - 2 - len(title)) // 2
@@ -19,18 +19,13 @@ def visible_length(text: str) -> int:
 
 def pad_ansi_text(text: str, width: int) -> str:
     current_len = visible_length(text)
-    if current_len < width:
-        return text + (" " * (width - current_len))
-    else:
-        return text
+    return text + " " * max(0, width - current_len)
 
-def print_two_column_screen(left_lines, right_lines, left_title="Left", right_title="Right"):
+def print_two_column_screen(left_lines, right_lines, left_title="Left", right_title="Right") -> None:
     left_width = 50
     right_width = 50
-    header_left = f" {left_title} "
-    header_right = f" {right_title} "
-    header_left = header_left.center(left_width, "─")
-    header_right = header_right.center(right_width, "─")
+    header_left = f" {left_title} ".center(left_width, "─")
+    header_right = f" {right_title} ".center(right_width, "─")
     
     print("┌" + header_left + "┬" + header_right + "┐")
     
@@ -59,7 +54,7 @@ def print_two_column_screen(left_lines, right_lines, left_title="Left", right_ti
     print("└" + "─"*left_width + "┴" + "─"*right_width + "┘")
 
 def print_three_column_screen(left_lines, middle_lines, right_lines,
-                              left_title="Left", middle_title="Middle", right_title="Right"):
+                              left_title="Left", middle_title="Middle", right_title="Right") -> None:
     width_left = 30
     width_middle = 40
     width_right = 34
@@ -67,7 +62,6 @@ def print_three_column_screen(left_lines, middle_lines, right_lines,
     top_left   = pad_ansi_text(f" {left_title} ", width_left)
     top_middle = pad_ansi_text(f" {middle_title} ", width_middle)
     top_right  = pad_ansi_text(f" {right_title} ", width_right)
-
 
     print("┌" + top_left.replace(" ", "─") +
           "┬" + top_middle.replace(" ", "─") +
