@@ -1,0 +1,43 @@
+{
+    "quests": {
+        "quest_healer_request": {
+            "name": "A Humble Beginning",
+            "description": "Collect the items from the tent's chest and return to the old man.",
+            "objectives": [
+                {
+                    "id": "get_started",
+                    "description": "Collect items from the old man's chest",
+                    "current": 0,
+                    "required": 2
+                }
+            ],
+            "rewards": {
+                "gold": 20,
+                "items": []
+            },
+            "unlock_conditions": {"min_level": 0},
+            "assigned_npc": "npc_old_man",
+            "trigger": {
+                "type": "collect",
+                "container_id": "chest_old_man",
+                "items_required": ["Wooden Sword", "Healing Potion"]
+            }
+        },
+        "quest_bandit_hunt": {
+            "name": "Bandit Menace",
+            "description": "Defeat 5 Bandits in Darkwood.",
+            "objectives": [
+                {"id": "kill_bandits", "description": "Kill bandits in Darkwood", "current": 0, "required": 5}
+            ],
+            "rewards": {"gold": 100, "items": ["Healing Potion"]},
+            "unlock_conditions": {"min_level": 1},
+            "assigned_npc": "npc_old_man",
+            "trigger": {
+                "type": "kill",
+                "enemy": "bandit",
+                "location_id": "loc_darkwood",
+                "required": 5
+            }
+        }
+    }
+}
