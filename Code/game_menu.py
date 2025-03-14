@@ -35,6 +35,53 @@ def open_game_menu(hero) -> None:
     lm = LocationManager()
     map_manager = MapManager()
 
+        # Add helper functions INSIDE open_game_menu but BEFORE the main loop
+    def show_quest_log(hero):
+        while True:
+            clear_screen()
+            print_framed("Quest Log")
+            print("1. Active Quests")
+            print("2. Completed Quests")
+            print("c. Cancel")
+            log_choice = input("Choose an option: ").strip().lower()
+            if log_choice == "1":
+                display_active_quests(hero)
+            elif log_choice == "2":
+                display_completed_quests(hero)
+            elif log_choice == "c":
+                break
+            else:
+                print("Invalid choice.")
+                input("Press Enter to continue...")
+
+    def display_active_quests(hero):
+        clear_screen()
+        print_framed("Active Quests")
+        if not hero.quest_log.active_quests:
+            print("No active quests.")
+        else:
+            for idx, quest in enumerate(hero.quest_log.active_quests, start=1):
+                print(f"{idx}. {quest.name}")
+                print(f"   {quest.description}")
+                print("   Objectives:")
+                for obj in quest.objectives:
+                    status = f"{obj.current}/{obj.required}" if not obj.completed else "Completed"
+                    print(f"   - {obj.description} [{status}]")
+                print()
+        input("Press Enter to continue...")
+
+    def display_completed_quests(hero):
+        clear_screen()
+        print_framed("Completed Quests")
+        if not hero.quest_log.completed_quests:
+            print("No completed quests.")
+        else:
+            for idx, quest in enumerate(hero.quest_log.completed_quests, start=1):
+                print(f"{idx}. {quest.name}")
+                print(f"   {quest.description}")
+        input("Press Enter to continue...")
+
+
     while True:
         clear_screen()
         if hero.current_building:
@@ -42,8 +89,10 @@ def open_game_menu(hero) -> None:
                 "1. Show Stats",
                 "2. Look around",
                 "3. Manage Inventory Items",
+                "4. Enter Building",
                 "5. Talk to NPC",
-                "x. Exit Building"
+                "6. Quest Log",
+                "c. Close Menu"
             ]
             middle_title = "Building"
             b_info = lm.buildings.get(hero.current_building, {})
@@ -82,6 +131,7 @@ def open_game_menu(hero) -> None:
                 "3. Manage Inventory Items",
                 "4. Enter Building",
                 "5. Talk to NPC",
+                "6. Quest Log",
                 "c. Close Menu"
             ]
             middle_title = "Location"
@@ -138,6 +188,8 @@ def open_game_menu(hero) -> None:
             enter_building(hero)
         elif choice == "5":
             talk_to_npc(hero)
+        elif choice == "6":
+            show_quest_log(hero)
         elif choice == "x" and hero.current_building:
             hero.current_building = None
             print("You exit the building and return to the open area.")
@@ -147,6 +199,7 @@ def open_game_menu(hero) -> None:
         else:
             print("Invalid option.")
             input("Press Enter to continue...")
+
 
 def game_loop(hero) -> None:
     clear_screen()

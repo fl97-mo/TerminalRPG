@@ -1,4 +1,3 @@
-import time
 import re
 from validations import get_validated_choice
 from backpack import Backpack
@@ -6,7 +5,7 @@ from item import get_rarity_color, RESET_COLOR
 from colors import Colors
 from npc_manager import NPCManager
 from dialog import Dialog
-
+from quest_manager import QuestManager
 ansi_escape_pattern = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
 
 def visible_length(text: str) -> int:
@@ -25,10 +24,11 @@ class Character:
         hero_formatted = Colors.color_text(self.name, color_name="Cyan", style_names="Bold")
         print(f"Name:    {hero_formatted}\n"
               f"Level:   {self.level}\n"
+              f"XP:      {self.current_xp}/{self.next_level_xp}\n"
               f"Guild:   {self.guild}\n"
               f"Health:  {self.health} HP\n"
               f"Stamina: {self.stamina} SP\n"
-              f"Attack:  {self.attack} AP\n")
+              f"Attack:  {self.attack} AP\n") 
 
 class Hero(Character):
     def __init__(self, name: str, health: int, stamina: int, attack: int, level: int, guild: str, inventory: dict):
@@ -50,7 +50,29 @@ class Hero(Character):
         self.backpack = Backpack(capacity=20)
         self.gold = 50
         self.recalcStats()
+        self.current_xp = 0
+        self.next_level_xp = self.calculate_xp_requirement()
+        self.quest_log = QuestManager()
+    def calculate_xp_requirement(self):
+        base_xp = 100
+        return int(base_xp * (1.5 ** (self.level)))
 
+    def add_xp(self, amount):
+        self.current_xp += amount
+        print(f"Gained {amount} XP!")
+        while self.current_xp >= self.next_level_xp:
+            self.level_up()
+
+    def level_up(self):
+        self.level += 1
+        self.current_xp -= self.next_level_xp
+        self.next_level_xp = self.calculate_xp_requirement()
+        print(f"New Level ({self.level}) reached!")
+        self.base_health += 10
+        self.base_attack += 2
+        self.recalcStats()
+
+ 
     def recalcStats(self) -> None:
         total_attack = self.base_attack
         total_health_bonus = 0

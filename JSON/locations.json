@@ -24,9 +24,10 @@
     }
   },
   "containers": {
-    "chest_old_man": {
-      "name": "Worn Chest",
-      "contains": ["Wooden Sword", "Healing Potion"]
-    }
+      "chest_old_man": {
+        "id": "chest_old_man",
+        "name": "Worn Chest",
+        "contains": ["Wooden Sword", "Healing Potion"]
+      }
   }
 }

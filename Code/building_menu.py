@@ -4,13 +4,17 @@ from location_manager import LocationManager
 from item import ItemLoader
 from map_manager import MapManager
 
-def open_container(hero, container_info: dict, items_data: dict) -> None:
+
+
+def open_container(hero, container_info: dict, items_data: dict, container_id: str) -> None:
     clear_screen()
     print_framed("Opening " + container_info.get("name", "Unknown Container"))
+
     if not container_info.get("contains"):
         print("It is empty.")
         input("Press Enter to continue...")
         return
+
     while True:
         print("\nItems in " + container_info.get("name", "Unknown Container") + ":")
         for idx, itm in enumerate(container_info["contains"], start=1):
@@ -18,16 +22,23 @@ def open_container(hero, container_info: dict, items_data: dict) -> None:
         print("a. Take all")
         print("c. Cancel")
         choice = input("Choose an option: ").strip().lower()
+
         if choice == "a":
+            taken_items = []
             for itm in container_info["contains"]:
                 if itm in items_data:
                     hero.addToBackpack(items_data[itm])
+                    taken_items.append(itm)
                     print("Took " + itm + ".")
+            count = len(taken_items)
             container_info["contains"].clear()
+            hero.quest_log.check_triggers("collect", hero, container_id=container_id, count=count)
             input("Press Enter to continue...")
             return
+
         elif choice == "c":
             return
+
         else:
             if not choice.isdigit():
                 print("Invalid choice.")
@@ -46,6 +57,7 @@ def open_container(hero, container_info: dict, items_data: dict) -> None:
             hero.addToBackpack(items_data[item_to_take])
             print("Took " + item_to_take + ".")
             container_info["contains"].pop(pick_index)
+            hero.quest_log.check_triggers("collect", hero, container_id=container_id, count=1)
             input("Press Enter to continue...")
             clear_screen()
             print_framed("Opening " + container_info.get("name", "Unknown Container"))
@@ -160,4 +172,4 @@ def enter_building(hero) -> None:
             input("Press Enter to continue...")
             continue
         container_info = containers_data[container_id]
-        open_container(hero, container_info, items_data)
+        open_container(hero, container_info, items_data, container_id)
