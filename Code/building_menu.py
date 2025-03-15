@@ -63,7 +63,10 @@ def open_container(hero, container_info: dict, items_data: dict, container_id: s
             print_framed("Opening " + container_info.get("name", "Unknown Container"))
 
 def enter_building(hero) -> None:
-    clear_screen()
+    from ui_helpers import clear_screen, print_framed, print_three_column_screen
+    from location_manager import LocationManager
+    from item import ItemLoader
+    from map_manager import MapManager
     lm = LocationManager()
     map_manager = MapManager()
     items_data = ItemLoader.load_items_from_json()
@@ -71,28 +74,30 @@ def enter_building(hero) -> None:
     containers_data = lm.containers
     if hero.current_location not in lm.locations:
         print("You are at an unknown location.")
-        input("Press Enter to continue...")
+        input("Press Enter to return...")
         return
     location_buildings = [(b_id, b_info) for b_id, b_info in buildings_data.items() if b_info.get("location") == hero.current_location]
     if not location_buildings:
         print("There are no buildings here.")
-        input("Press Enter to continue...")
+        input("Press Enter to return...")
         return
     print_framed("Buildings")
     for idx, (b_id, b_info) in enumerate(location_buildings, start=1):
         print(f"{idx}. {b_info.get('name', b_id)}")
-    print("c. Cancel")
+    print("Press Enter to return.")
     choice = input("Enter building number: ").strip().lower()
-    if choice == "c":
-        return
+    if choice == "":
+        confirm = input("Press Enter to confirm return or type 'c' to cancel: ").strip().lower()
+        if confirm == "":
+            return
     if not choice.isdigit():
         print("Invalid choice.")
-        input("Press Enter to continue...")
+        input("Press Enter to return...")
         return
     choice_num = int(choice)
     if choice_num < 1 or choice_num > len(location_buildings):
         print("Invalid choice.")
-        input("Press Enter to continue...")
+        input("Press Enter to return...")
         return
     selected_building_id, selected_building = location_buildings[choice_num - 1]
     print("You entered " + selected_building.get("name", selected_building_id) + ".")
@@ -114,7 +119,7 @@ def enter_building(hero) -> None:
         else:
             left_lines.append("(No containers here)")
         left_lines.append("")
-        left_lines.append("c. Cancel (exit building)")
+        left_lines.append("Press Enter to return")
         middle_lines = []
         b_name = selected_building.get("name", "Unknown Building")
         b_faction = selected_building.get("faction", "Unknown")
@@ -123,6 +128,7 @@ def enter_building(hero) -> None:
         middle_lines.append(b_name)
         middle_lines.append(f"Faction: {b_faction}")
         middle_lines.append(f"Type: {b_type}")
+        import textwrap
         desc_wrapped = textwrap.wrap(f"Description: {b_desc}", width=40)
         middle_lines.extend(desc_wrapped)
         right_lines = []
@@ -151,25 +157,26 @@ def enter_building(hero) -> None:
             middle_title="Building Info",
             right_title="Map"
         )
-        c_choice = input("Choose a container (or 'c' to exit building): ").strip().lower()
-        if c_choice == "c":
+        c_choice = input("Choose a container (or press Enter to exit building): ").strip().lower()
+        if c_choice == "":
             hero.current_building = None
             print("You exit the building and return to the open area.")
             input("Press Enter to continue...")
             break
+
         if not c_choice.isdigit():
             print("Invalid choice.")
-            input("Press Enter to continue...")
+            input("Press Enter to return...")
             continue
         c_num = int(c_choice)
         if c_num < 1 or c_num > len(container_ids):
             print("Invalid choice.")
-            input("Press Enter to continue...")
+            input("Press Enter to return...")
             continue
         container_id = container_ids[c_num - 1]
         if container_id not in containers_data:
             print("No information about this container.")
-            input("Press Enter to continue...")
+            input("Press Enter to return...")
             continue
-        container_info = containers_data[container_id]
-        open_container(hero, container_info, items_data, container_id)
+        from building_menu import open_container
+        open_container(hero, containers_data[container_id], items_data, container_id)

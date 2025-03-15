@@ -3,8 +3,9 @@ from location_manager import LocationManager
 from npc_manager import NPCManager
 from colors import Colors
 from validations import get_validated_choice
-from character import Hero
-
+from character import Hero, NPC
+from dialog import Dialog
+from ui_helpers import clear_screen, print_framed
 
 def handle_quests(npc, hero, available_quests):
     clear_screen()
@@ -82,290 +83,137 @@ def handle_quest_interaction(npc_id: str, hero: Hero) -> None:
         elif choice == "c":
             break
 
-def talk_to_npc(hero: Hero) -> None:
-    clear_screen()
+def talk_to_npc(hero):
+    from ui_helpers import clear_screen
+    from location_manager import LocationManager
+    from npc_manager import NPCManager
+    from dialog import Dialog
     lm = LocationManager()
     npc_m = NPCManager()
-
+    Dialog.clear_screen()
     location = lm.locations.get(hero.current_location)
     if not location or not location.get("npcs"):
         print("There is no one to talk to here.")
-        input("Press Enter to continue...")
+        input("Press Enter to return...")
         return
-
     print("People here:")
     npc_list = location["npcs"]
-
     for idx, npc_id in enumerate(npc_list, start=1):
         npc_name = npc_m.get_npc_name(npc_id)
         print(f"{idx}. {npc_name}")
-    print("c. Cancel")
-
+    print("Press Enter to return.")
     choice = input("Choose a person to talk to: ").strip().lower()
-
-    if choice == "c":
-        return
-
-    if not choice.isdigit():
+    if choice == "":
+        confirm = input("Press Enter to confirm return or type 'c' to cancel: ").strip().lower()
+        if confirm == "":
+            return
+    if not choice.isdigit() or (int(choice) - 1) not in range(len(npc_list)):
         print("Invalid choice.")
-        input("Press Enter to continue...")
+        input("Press Enter to return...")
         return
+    chosen_npc_id = npc_list[int(choice) - 1]
+    npc_data = npc_m.get_npc_data(chosen_npc_id)
+    dialogues = Dialog.load_dialogues()
+    npc_dialogues = dialogues.get(npc_data.get("dialogue_id"), {})
+    branch = "greeting"
+    branch_data = npc_dialogues.get(branch, {})
+    from character import NPC
+    npc = NPC(npc_data["name"], 100, 100, 10, 1, None, npc_dialogues, npc_id=chosen_npc_id)
+    speaker_npc = npc_m.get_npc_name(chosen_npc_id)
+    speaker_hero = hero.name
+    quest_log = hero.quest_log
 
-    idx = int(choice) - 1
-    if idx < 0 or idx >= len(npc_list):
-        print("Invalid choice.")
-        input("Press Enter to continue...")
-        return
+    def play_dialog(lines, speaker):
+        for text_line in lines:
+            Dialog.clear_screen()
+            print(speaker)
+            Dialog.show(text_line)
+            Dialog.wait_for_input()
 
-    chosen_npc_id = npc_list[idx]
-    npc_name = npc_m.get_npc_name(chosen_npc_id)
+    already_greeted = False
 
     while True:
-        clear_screen()
-        print_framed(npc_name)
-        print("1. Talk")
-        print("2. Quests")
-        print("c. Cancel")
-        
-        action = input("Choose option: ").strip().lower()
-        
-        if action == "1":
-            clear_screen()
-            # Direkte Dialogimplementierung ohne handle_dialog
-            print(f"{npc_name}:")
-            print("1. Thank you")
-            print("2. Quests")
-            print("c. Cancel")
-            
-            dialog_choice = input("Choose dialogue option: ").strip().lower()
-            if dialog_choice == "1":
-                clear_screen()
-                print(f"{hero.name}: Thank you, {npc_name}!")
-                input("Press Enter to continue...")
-                clear_screen()
-                print(f"{npc_name}: You're welcome, traveler. May fortune smile upon you.")
-                input("Press Enter to continue...")
-        
-        elif action == "2":
-            handle_quest_interaction(chosen_npc_id, hero)
-        
-        elif action == "c":
+        Dialog.clear_screen()
+        if not already_greeted:
+            greeting_lines = [line.format(hero_name=hero.name) for line in branch_data.get("dialog", [])]
+            if greeting_lines:
+                play_dialog(greeting_lines, speaker_npc)
+            already_greeted = True
+
+        all_options = branch_data.get("options", [])
+        filtered_options = []
+        for opt in all_options:
+            if opt.get("id") == "leave":
+                continue
+            quest_id = opt.get("followup", {}).get("quest")
+            if quest_id:
+                quest_obj = quest_log.available_quests.get(quest_id)
+                if quest_obj and quest_obj.status in ["active", "completed"]:
+                    continue
+            filtered_options.append(opt)
+
+        print("\nDialogue Options:")
+        for idx, opt in enumerate(filtered_options, start=1):
+            print(f"{idx}. {opt.get('text')}")
+        print("0. Return")
+
+        completable = [q for q in quest_log.active_quests if q.assigned_npc == chosen_npc_id and q.check_completion()]
+        if completable:
+            print("r. Claim Reward")
+
+        choice2 = input("Choose an option: ").strip().lower()
+        if choice2 == "" or choice2 == "0":
             break
-        
+        elif choice2 == "r" and completable:
+            quest = completable[0]
+            npc_location = "Unknown Location"
+            for loc in lm.locations.values():
+                if "npcs" in loc and chosen_npc_id in loc["npcs"]:
+                    npc_location = loc.get("name", "Unknown Location")
+                    break
+            Dialog.clear_screen()
+            reward_lines = [f"Quest '{quest.name}' completed – return to {npc_m.get_npc_name(chosen_npc_id)} in {npc_location} to claim your reward."]
+            play_dialog(reward_lines, speaker_npc)
+            confirm = input("Press Enter to confirm claim or type 'c' to cancel: ").strip().lower()
+            if confirm == "":
+                quest_log.complete_quest(quest, hero)
+                input("Press Enter to continue...")
+                break
+            else:
+                input("Press Enter to continue the conversation...")
+                continue
+        elif choice2.isdigit():
+            opt_index = int(choice2) - 1
+            if opt_index < 0 or opt_index >= len(filtered_options):
+                print("Invalid option.")
+                input("Press Enter to try again...")
+                continue
+            selected_opt = filtered_options[opt_index]
+            reply_text = [selected_opt.get("reply", "").format(hero_name=hero.name)]
+            play_dialog(reply_text, speaker_npc)
+            if "npc_followup" in selected_opt:
+                lines = [line.format(hero_name=hero.name) for line in selected_opt["npc_followup"].get("dialog", [])]
+                play_dialog(lines, speaker_npc)
+            elif "hero_followup" in selected_opt:
+                lines = [line.format(hero_name=hero.name) for line in selected_opt["hero_followup"].get("dialog", [])]
+                play_dialog(lines, speaker_hero)
+            if "followup" in selected_opt and "quest" in selected_opt["followup"]:
+                followup_data = selected_opt["followup"]
+                if "dialog" in followup_data:
+                    lines = [line.format(hero_name=hero.name) for line in followup_data["dialog"]]
+                    play_dialog(lines, speaker_npc)
+                quest_id = followup_data["quest"]
+                if quest_id in quest_log.available_quests and quest_log.available_quests[quest_id].status in ["locked", "available"]:
+                    accept = input("Press Enter to accept the quest or type 'c' to decline: ").strip().lower()
+                    if accept == "":
+                        quest_log.start_quest(quest_id)
+                        print("Quest accepted!")
+                        input("Press Enter to continue...")
+                    else:
+                        print("Quest declined. You can try again later.")
+                        input("Press Enter to continue the conversation...")
+                        continue
+            continue
         else:
             print("Invalid option.")
-            input("Press Enter to continue...")
-    clear_screen()
-    lm = LocationManager()
-    npc_m = NPCManager()
-
-    location = lm.locations.get(hero.current_location)
-    if not location or not location.get("npcs"):
-        print("There is no one to talk to here.")
-        input("Press Enter to continue...")
-        return
-
-    print("People here:")
-    npc_list = location["npcs"]
-
-    for idx, npc_id in enumerate(npc_list, start=1):
-        npc_name = npc_m.get_npc_name(npc_id)
-        print(f"{idx}. {npc_name}")
-    print("c. Cancel")
-
-    choice = input("Choose a person to talk to: ").strip().lower()
-
-    if choice == "c":
-        return
-
-    if not choice.isdigit():
-        print("Invalid choice.")
-        input("Press Enter to continue...")
-        return
-
-    idx = int(choice) - 1
-    if idx < 0 or idx >= len(npc_list):
-        print("Invalid choice.")
-        input("Press Enter to continue...")
-        return
-
-    chosen_npc_id = npc_list[idx]
-    npc_name = npc_m.get_npc_name(chosen_npc_id)
-
-    while True:
-        clear_screen()
-        print_framed(npc_name)
-        print("1. Talk")
-        print("2. Quests")
-        print("c. Cancel")
-        
-        action = input("Choose option: ").strip().lower()
-        
-        if action == "1":
-            clear_screen()
-            print(f"{npc_name}:")
-            print("1. Thank you")
-            print("2. Quests")
-            print("c. Cancel")
-            
-            dialog_choice = input("Choose dialogue option: ").strip().lower()
-            if dialog_choice == "1":
-                clear_screen()
-                print(f"{hero.name}: Thank you, {npc_name}!")
-                input("Press Enter to continue...")
-                clear_screen()
-                print(f"{npc_name}: You're welcome, traveler. May fortune smile upon you.")
-                input("Press Enter to continue...")
-        
-        elif action == "2":
-            handle_quest_interaction(chosen_npc_id, hero)
-        
-        elif action == "c":
-            break
-        
-        else:
-            print("Invalid option.")
-            input("Press Enter to continue...")
-    clear_screen()
-    lm = LocationManager()
-    npc_m = NPCManager()
-
-    location = lm.locations.get(hero.current_location)
-    if not location or not location.get("npcs"):
-        print("There is no one to talk to here.")
-        input("Press Enter to continue...")
-        return
-
-    print("People here:")
-    npc_list = location["npcs"]
-
-    for idx, npc_id in enumerate(npc_list, start=1):
-        npc_name = npc_m.get_npc_name(npc_id)
-        print(f"{idx}. {npc_name}")
-    print("c. Cancel")
-
-    choice = input("Choose a person to talk to: ").strip().lower()
-
-    if choice == "c":
-        return
-
-    if not choice.isdigit():
-        print("Invalid choice.")
-        input("Press Enter to continue...")
-        return
-
-    idx = int(choice) - 1
-    if idx < 0 or idx >= len(npc_list):
-        print("Invalid choice.")
-        input("Press Enter to continue...")
-        return
-
-    chosen_npc_id = npc_list[idx]
-    npc_name = npc_m.get_npc_name(chosen_npc_id)
-
-    while True:
-        clear_screen()
-        print_framed(npc_name)
-        print("1. Talk")
-        print("2. Quests")
-        print("c. Cancel")
-        
-        action = input("Choose option: ").strip().lower()
-        
-        if action == "1":
-            clear_screen()
-            print(f"{npc_name}:")
-            print("1. Thank you")
-            print("2. Quests")
-            print("c. Cancel")
-            
-            dialog_choice = input("Choose dialogue option: ").strip().lower()
-            if dialog_choice == "1":
-                clear_screen()
-                print(f"{hero.name}: Thank you, {npc_name}!")
-                input("Press Enter to continue...")
-                clear_screen()
-                print(f"{npc_name}: You're welcome, traveler. May fortune smile upon you.")
-                input("Press Enter to continue...")
-        
-        elif action == "2":
-            handle_quest_interaction(chosen_npc_id, hero)
-        
-        elif action == "c":
-            break
-        
-        else:
-            print("Invalid option.")
-            input("Press Enter to continue...")
-    clear_screen()
-    lm = LocationManager()
-    npc_m = NPCManager()
-
-    location = lm.locations.get(hero.current_location)
-    if not location or not location.get("npcs"):
-        print("There is no one to talk to here.")
-        input("Press Enter to continue...")
-        return
-
-    print("People here:")
-    npc_list = location["npcs"]
-
-    for idx, npc_id in enumerate(npc_list, start=1):
-        npc_name = npc_m.get_npc_name(npc_id)
-        print(f"{idx}. {npc_name}")
-    print("c. Cancel")
-
-    choice = input("Choose a person to talk to: ").strip().lower()
-
-    if choice == "c":
-        return
-
-    if not choice.isdigit():
-        print("Invalid choice.")
-        input("Press Enter to continue...")
-        return
-
-    idx = int(choice) - 1
-    if idx < 0 or idx >= len(npc_list):
-        print("Invalid choice.")
-        input("Press Enter to continue...")
-        return
-
-    chosen_npc_id = npc_list[idx]
-    npc_name = npc_m.get_npc_name(chosen_npc_id)
-
-    while True:
-        clear_screen()
-        print_framed(npc_name)
-        print("1. Talk")
-        print("2. Quests")
-        print("c. Cancel")
-        
-        action = input("Choose option: ").strip().lower()
-        
-        if action == "1":
-
-            clear_screen()
-            print(f"{npc_name}:")
-            print("1. Thank you")
-            print("2. Quests")
-            print("c. Cancel")
-            
-            dialog_choice = input("Choose dialogue option: ").strip().lower()
-            if dialog_choice == "1":
-                clear_screen()
-                print(f"{hero.name}: Thank you, {npc_name}!")
-                input("Press Enter to continue...")
-                clear_screen()
-                print(f"{npc_name}: You're welcome, traveler. May fortune smile upon you.")
-                input("Press Enter to continue...")
-        
-        elif action == "2":
-            handle_quest_interaction(chosen_npc_id, hero)
-        
-        elif action == "c":
-            break
-        
-        else:
-            print("Invalid option.")
-            input("Press Enter to continue...")
+            input("Press Enter to try again...")

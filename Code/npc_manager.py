@@ -22,7 +22,8 @@ class NPCManager:
     def __init__(self) -> None:
         data = load_npc_data()
         self.npcs: dict = data.get("npcs", {})
-
+    def get_npc_data(self, npc_id: str) -> dict:
+        return self.npcs.get(npc_id, {})
     def get_npc_name(self, npc_id: str) -> str:
         npc_info = self.npcs.get(npc_id)
         if npc_info:

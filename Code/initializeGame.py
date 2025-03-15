@@ -40,4 +40,6 @@ def create_new_game() -> Hero:
     hero.current_location = start_location_id
     hero.addToBackpack(all_items["Healing Potion"], quantity=5)
     hero.addToBackpack(all_items["Wooden Sword"], quantity=1)
+    
+    hero.quest_log.start_quest("quest_healer_request")
     return hero

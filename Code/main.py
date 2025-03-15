@@ -5,10 +5,9 @@ def main():
 
 
     hero = create_new_game()
+    game_loop(hero)
     print("Welcome to TerminalRPG " + hero.name + "!")
     print("That's it so far, the game is still being worked on.")
-    game_loop(hero)
-
 if __name__ == "__main__":
     main()
 

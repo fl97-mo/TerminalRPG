@@ -1,68 +1,118 @@
 {
-    "Old Man": {
-      "1": {
-        "dialog": [
-          "Ah... another traveler seeking answers...",
-          "The world you have always known, young wanderer... was not always like this.",
-          "Once, under the banner of the noble Lacorian Dynasty, this land flourished.",
-          "A golden age of peace, prosperity, and unity... a time of legends.",
-          "Merchants thrived, towns bustled, and the banners of Castelac flew high above the land.",
-          "But peace is a fragile thing...",
-          "Then came the riders from the East... merciless, swift, and unrelenting.",
-          "Their horde swept through the kingdom like a storm, leaving ruin in their wake.",
-          "Castelac stood tall, but even its mighty walls could not withstand the flames of war.",
-          "The great kingdom shattered, its people scattered, its rulers slain or in hiding...",
-          "Now, law is but a memory—warlords, broken nobles, and mercenaries fight for control.",
-          "The common folk suffer, hunger spreads, and crime festers in every ruined street.",
-          "Yet, some still whisper in the dark... of a time when a hero shall rise...",
-          "Tell me, young traveler, what is your name?"
-        ]
-      },
-      "2": {
-        "dialog": [
-          "Ah, it's a pleasure to meet you, {hero_name}...",
-          "May I ask, what humble background do your parents come from?"
-        ],
-        "options": {
-          "Smith": "My father was a blacksmith, and my mother assisted him at the forge.",
-          "Hunter": "Both my parents were hunters, tracking game and trading hides at the local market.",
-          "Farmer": "They were hardworking farmers, tending the fields from dawn till dusk.",
-          "Baker": "My parents ran a small bakery, kneading dough and supplying fresh bread to the community.",
-          "Carpenter": "They worked as carpenters, building and repairing homes in our village."
-        },
-        "followup": {
-          "Smith": {
+  "Old Man": {
+    "1": {
+      "dialog": [
+        "Ah... another traveler seeking answers...",
+        "The world you have always known, young wanderer... was not always like this.",
+        "Once, under the banner of the noble Lacorian Dynasty, this land flourished.",
+        "A golden age of peace, prosperity, and unity... a time of legends.",
+        "Merchants thrived, towns bustled, and the banners of Castelac flew high above the land.",
+        "But peace is a fragile thing...",
+        "Then came the riders from the East... merciless, swift, and unrelenting.",
+        "Their horde swept through the kingdom like a storm, leaving ruin in their wake.",
+        "Castelac stood tall, but even its mighty walls could not withstand the flames of war.",
+        "The great kingdom shattered, its people scattered, its rulers slain or in hiding...",
+        "Now, law is but a memory—warlords, fallen nobles, and mercenaries fight for control.",
+        "The common folk suffer, hunger spreads, and crime festers in every ruined street.",
+        "Yet, some still whisper in the dark... of a time when a hero shall rise...",
+        "Tell me, young traveler, what is your name?"
+      ]
+    },
+    "2": {
+      "dialog": [
+        "Ah, it's a pleasure to meet you, {hero_name}...",
+        "May I ask, what humble background do your parents come from?"
+      ],
+      "options": [
+        {
+          "id": "Smith",
+          "text": "Smith",
+          "reply": "My father was a blacksmith, and my mother assisted him at the forge.",
+          "followup": {
             "dialog": [
               "Ah, a lineage of smiths! The clanging of the hammer on the anvil must have echoed through your childhood.",
               "I admire the strength it takes to work by the forge."
             ]
-          },
-          "Hunter": {
+          }
+        },
+        {
+          "id": "Hunter",
+          "text": "Hunter",
+          "reply": "Both my parents were hunters, tracking game and trading hides at the local market.",
+          "followup": {
             "dialog": [
               "A hunter, eh? The wilds are unforgiving, yet they bestow wisdom upon those who brave them.",
               "Your parents must have taught you the ways of the forest."
             ]
-          },
-          "Farmer": {
+          }
+        },
+        {
+          "id": "Farmer",
+          "text": "Farmer",
+          "reply": "They were hardworking farmers, tending the fields from dawn till dusk.",
+          "followup": {
             "dialog": [
               "Farming is a noble endeavor. The earth gives, and you learn to live in harmony with nature.",
               "I hope the seasons have been kind to your family."
             ]
-          },
-          "Baker": {
+          }
+        },
+        {
+          "id": "Baker",
+          "text": "Baker",
+          "reply": "My parents ran a small bakery, kneading dough and supplying fresh bread to the community.",
+          "followup": {
             "dialog": [
               "A baker, you say? The aroma of fresh bread can warm the coldest of hearts.",
               "I can almost smell the yeast and hear the crackle of the oven."
             ]
-          },
-          "Carpenter": {
+          }
+        },
+        {
+          "id": "Carpenter",
+          "text": "Carpenter",
+          "reply": "They worked as carpenters, building and repairing homes in our village.",
+          "followup": {
             "dialog": [
               "Carpentry is the art of shaping wood and building dreams.",
               "I admire the art of forming something beautiful and useful from scratch."
             ]
           }
         }
-      }
+      ]
+    },
+    "greeting": {
+      "dialog": [
+        "Ah, you're back, young adventurer. What is on your mind?"
+      ],
+      "options": [
+        {
+          "id": "advice",
+          "text": "Hello old man, do you have any advice for me?",
+          "reply": "My advice: Always seek the light in the darkness."
+        },
+        {
+          "id": "help",
+          "text": "Do you need help?",
+          "reply": "Actually, I have a task for you: Gather the items needed to protect our village.",
+          "followup": {
+            "dialog": [
+              "When you're ready, accept the task and help me recover the lost treasures."
+            ],
+            "quest": "quest_healer2_request"
+          },
+          "npc_followup": {
+            "dialog": [
+              "Remember to return to me after completing the quest."
+            ]
+          }
+        },
+        {
+          "id": "leave",
+          "text": "Leave",
+          "reply": ""
+        }
+      ]
     }
   }
-  
+}

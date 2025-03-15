@@ -18,12 +18,18 @@ def load_json(filename: str) -> dict:
         return {}
 
 class LocationManager:
+    _instance = None
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
     def __init__(self) -> None:
-        data = load_json("locations.json")
-        self.locations: dict = data.get("locations", {})
-        self.buildings: dict = data.get("buildings", {})
-        self.containers: dict = data.get("containers", {})
-
+        if not hasattr(self, '_initialized'):
+            data = load_json("locations.json")
+            self.locations = data.get("locations", {})
+            self.buildings = data.get("buildings", {})
+            self.containers = data.get("containers", {})
+            self._initialized = True
     def get_start_location(self) -> tuple:
         for loc_id, loc in self.locations.items():
             if loc.get("player_start", False):

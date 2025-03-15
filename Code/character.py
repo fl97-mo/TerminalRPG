@@ -223,37 +223,30 @@ class NPC(Character):
             print(f"{self.name} has no dialogue for conversation {conversation}.")
             return None
         lines = [line.format(**kwargs) for line in conv_data.get("dialog", [])]
-
         if self.npc_id:
             npc_manager = NPCManager()
             speaker_name = npc_manager.get_npc_name(self.npc_id)
         else:
             speaker_name = Colors.color_text(self.name, color_name="Bright White", style_names="Bold")
-
         for line in lines:
             Dialog.clear_screen()
             print(f"{speaker_name}:")
             Dialog.show(line)
             Dialog.wait_for_input()
-
         options = conv_data.get("options")
         if options:
             print("\nOptions:")
-            option_keys = list(options.keys())
-            for idx, key in enumerate(option_keys, start=1):
-                print(f"{idx}. {key}")
-            choice = get_validated_choice(
-                "Choose an option (enter a number): ",
-                valid_options=range(1, len(option_keys)+1)
-            )
-            chosen_key = option_keys[choice - 1]
+            for idx, option in enumerate(options, start=1):
+                print(f"{idx}. {option['text']}")
+            choice = get_validated_choice("Choose an option (enter a number): ", valid_options=range(1, len(options)+1))
+            chosen_option = options[choice - 1]
             hero_name = Colors.color_text(kwargs.get('hero_name', 'Hero'), color_name="Cyan", style_names="Bold")
-            answer_text = options[chosen_key]
+            answer_text = chosen_option["reply"]
             Dialog.clear_screen()
             print(f"{hero_name}:")
             Dialog.show(answer_text)
             Dialog.wait_for_input()
-            followup_data = conv_data.get("followup", {}).get(chosen_key)
+            followup_data = chosen_option.get("followup")
             if followup_data:
                 followup_lines = [line.format(**kwargs) for line in followup_data.get("dialog", [])]
                 for line in followup_lines:
@@ -261,5 +254,13 @@ class NPC(Character):
                     print(f"{speaker_name}:")
                     Dialog.show(line)
                     Dialog.wait_for_input()
-            return chosen_key
+                if "quest" in followup_data:
+                    quest_id = followup_data["quest"]
+                    quest_log = kwargs.get("hero").quest_log if "hero" in kwargs else None
+                    if quest_log and quest_log.available_quests[quest_id].status == "locked":
+                        quest_log.unlock_quest(quest_id)
+                        start_now = input(f"Do you want to start the quest '{quest_log.available_quests[quest_id].name}' now? (y/n): ").lower()
+                        if start_now == "y":
+                            quest_log.start_quest(quest_id)
+            return chosen_option["id"]
         return None

@@ -7,16 +7,17 @@ class Quest:
         self.rewards = quest_data["rewards"]
         self.assigned_npc = quest_data["assigned_npc"]
         self.trigger = quest_data["trigger"]
-        self.is_completed = False
-        self.is_accepted = False
+        self.status = quest_data.get("status", "locked")
 
     def check_completion(self):
         if all(obj.completed for obj in self.objectives):
-            self.is_completed = True
+            self.status = "completed"
             return True
         return False
 
     def update_progress(self, trigger_type, **kwargs):
+        if self.status != "active":
+            return False
         if self.trigger.get("type") != trigger_type:
             return False
         if trigger_type == "collect":
@@ -28,15 +29,7 @@ class Quest:
                 if obj.current >= obj.required:
                     obj.completed = True
             return self.check_completion()
-        elif trigger_type == "kill":
-            if kwargs.get("enemy_type") != self.trigger.get("enemy"):
-                return False
-            count = kwargs.get("count", 1)
-            for obj in self.objectives:
-                obj.current += count
-                if obj.current >= obj.required:
-                    obj.completed = True
-            return self.check_completion()
+        # will add other triggers soon.
         return False
 
 class Objective:

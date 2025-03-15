@@ -3,27 +3,32 @@ from validations import get_validated_choice
 
 def open_backpack_menu(hero) -> None:
     while True:
+        from ui_helpers import clear_screen, print_framed
         clear_screen()
         hero.showInventory()
         print("Backpack Menu:")
         print("1. Use / Equip Item")
         print("2. Discard Item")
-        print("c. Close")
+        print("Press Enter to return")
         choice = input("Select: ").strip().lower()
-        if choice == "1":
+        if choice == "":
+            confirm = input("Press Enter to confirm return or type 'c' to cancel: ").strip().lower()
+            if confirm == "":
+                break
+        elif choice == "1":
             use_item_in_backpack(hero)
         elif choice == "2":
             drop_item_from_backpack(hero)
-        elif choice == "c":
-            break
         else:
             print("Invalid option.")
             input("Press Enter to continue...")
 
 def use_item_in_backpack(hero) -> None:
-    slot_str = input("Which slot do you want to use (1-20) or c to close: ").strip().lower()
-    if slot_str == "c":
-        return
+    slot_str = input("Which slot do you want to use (1-20) or press Enter to return: ").strip().lower()
+    if slot_str == "":
+        confirm = input("Press Enter to confirm return or type 'c' to cancel: ").strip().lower()
+        if confirm == "":
+            return
     if not slot_str.isdigit():
         print("Invalid Slot Number.")
         input("Press Enter to continue...")
@@ -38,25 +43,31 @@ def use_item_in_backpack(hero) -> None:
         print("This slot is empty.")
         input("Press Enter to continue...")
         return
-
     item = slot["item"]
     quantity = slot["quantity"]
+    from ui_helpers import print_framed
     print_framed("Item Info")
     item.inspect_Item()
     print("Quantity: " + str(quantity))
     print("-----------------")
     print("1. Equip")
     print("2. Consume")
-    print("c. Cancel")
+    print("Press Enter to return")
     action = input("Choice: ").strip().lower()
-    if action == "1":
+    if action == "":
+        confirm = input("Press Enter to confirm return or type 'c' to cancel: ").strip().lower()
+        if confirm == "":
+            return
+    elif action == "1":
         if hasattr(item, "equip_slots") and item.equip_slots:
             print("Available equip slots:")
             for idx, equip_slot in enumerate(item.equip_slots, start=1):
                 print(f"{idx}. {equip_slot}")
-            equip_choice = input("Select equip slot (number) or c to cancel: ").strip().lower()
-            if equip_choice == "c":
-                print("Canceled.")
+            equip_choice = input("Select equip slot (number) or press Enter to return: ").strip().lower()
+            if equip_choice == "":
+                confirm = input("Press Enter to confirm return or type 'c' to cancel: ").strip().lower()
+                if confirm == "":
+                    return
             elif equip_choice.isdigit():
                 equip_idx = int(equip_choice)
                 if 1 <= equip_idx <= len(item.equip_slots):
@@ -82,9 +93,11 @@ def use_item_in_backpack(hero) -> None:
     input("Press Enter to continue...")
 
 def drop_item_from_backpack(hero) -> None:
-    slot_str = input("Which slot to discard from (1-20) or c to close: ").strip().lower()
-    if slot_str == "c":
-        return
+    slot_str = input("Which slot to discard from (1-20) or press Enter to return: ").strip().lower()
+    if slot_str == "":
+        confirm = input("Press Enter to confirm return or type 'c' to cancel: ").strip().lower()
+        if confirm == "":
+            return
     if not slot_str.isdigit():
         print("Invalid Slot number.")
         input("Press Enter to continue...")
@@ -102,11 +115,11 @@ def drop_item_from_backpack(hero) -> None:
     item = slot["item"]
     quantity = slot["quantity"]
     print(f"There are {quantity}x {item.name} in slot {slot_index + 1}.")
-    discard_str = input("How many do you want to discard? (enter a number or c to cancel): ").strip().lower()
-    if discard_str == "c":
-        print("Canceled.")
-        input("Press Enter to continue...")
-        return
+    discard_str = input("How many do you want to discard? (enter a number) or press Enter to return: ").strip().lower()
+    if discard_str == "":
+        confirm = input("Press Enter to confirm return or type 'c' to cancel: ").strip().lower()
+        if confirm == "":
+            return
     if not discard_str.isdigit():
         print("Invalid number.")
         input("Press Enter to continue...")
