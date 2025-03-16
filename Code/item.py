@@ -17,7 +17,7 @@ def get_rarity_color(rarity_str: str) -> str:
 
 class Item:
     def __init__(self, icon: str, name: str, description: str, rarity: str, base_value: float,
-                 stackable: bool = True, stack_limit: int = 64, equip_slots=None):
+                stackable: bool = True, stack_limit: int = 64, equip_slots=None):
         self.icon = icon
         self.name = name
         self.description = description
@@ -60,7 +60,7 @@ class Weapon(Item):
 
 class Shield(Item):
     def __init__(self, icon: str, name: str, description: str, rarity: str, base_value: float,
-                 blocking_value: int, stackable: bool = True, stack_limit: int = 64, equip_slots=None):
+                blocking_value: int, stackable: bool = True, stack_limit: int = 64, equip_slots=None):
         super().__init__(icon, name, description, rarity, base_value, stackable, stack_limit, equip_slots)
         self.blocking_value = blocking_value
 
@@ -70,7 +70,7 @@ class Shield(Item):
 
 class Armor(Item):
     def __init__(self, icon: str, name: str, description: str, rarity: str, base_value: float,
-                 health_bonus: int, stackable: bool = True, stack_limit: int = 64, equip_slots=None):
+                health_bonus: int, stackable: bool = True, stack_limit: int = 64, equip_slots=None):
         super().__init__(icon, name, description, rarity, base_value, stackable, stack_limit, equip_slots)
         self.health_bonus = health_bonus
 
@@ -80,7 +80,7 @@ class Armor(Item):
 
 class Legs(Armor):
     def __init__(self, icon: str, name: str, description: str, rarity: str, base_value: float,
-                 health_bonus: int, stackable: bool = True, stack_limit: int = 64, equip_slots=None):
+                health_bonus: int, stackable: bool = True, stack_limit: int = 64, equip_slots=None):
         super().__init__(icon, name, description, rarity, base_value, health_bonus, stackable, stack_limit, equip_slots)
 
 class ItemLoader:

@@ -54,7 +54,7 @@ def print_two_column_screen(left_lines, right_lines, left_title="Left", right_ti
     print("└" + "─"*left_width + "┴" + "─"*right_width + "┘")
 
 def print_three_column_screen(left_lines, middle_lines, right_lines,
-                              left_title="Left", middle_title="Middle", right_title="Right") -> None:
+left_title="Left", middle_title="Middle", right_title="Right") -> None:
     width_left = 30
     width_middle = 40
     width_right = 34
@@ -64,8 +64,8 @@ def print_three_column_screen(left_lines, middle_lines, right_lines,
     top_right  = pad_ansi_text(f" {right_title} ", width_right)
 
     print("┌" + top_left.replace(" ", "─") +
-          "┬" + top_middle.replace(" ", "─") +
-          "┬" + top_right.replace(" ", "─") + "┐")
+        "┬" + top_middle.replace(" ", "─") +
+        "┬" + top_right.replace(" ", "─") + "┐")
 
     max_lines = max(len(left_lines), len(middle_lines), len(right_lines))
 

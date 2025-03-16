@@ -5,8 +5,22 @@
         "role": "Introduction",
         "attitude": "Neutral",
         "faction": "Kingdom of Castellan",
-        "dialogue_id": "Old Man"
+        "dialogue_id": "Old Man",
+        "emoji": "🧓"
+      },
+      "npc_wolf": {
+          "name": "Wolf",
+          "attitude": "Hostile",
+          "health": 50,
+          "stamina": 50,
+          "attack": 10,
+          "xp_reward": 200,
+          "gold_reward": 10,
+          "drop_chance": 1,
+          "drop_item": "Tattered Rags",
+          "emoji": "🐺"
       }
-    }
   }
+}
+
   

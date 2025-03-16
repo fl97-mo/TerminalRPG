@@ -6,6 +6,7 @@ from validations import get_validated_choice
 from character import Hero, NPC
 from dialog import Dialog
 from ui_helpers import clear_screen, print_framed
+from battle_system import Battle
 
 def handle_quests(npc, hero, available_quests):
     clear_screen()
@@ -27,10 +28,10 @@ def handle_quests(npc, hero, available_quests):
 def handle_quest_interaction(npc_id: str, hero: Hero) -> None:
     npc_manager = NPCManager()
     quest_manager = hero.quest_log
-    available_quests = [q for q in quest_manager.available_quests.values() 
+    available_quests = [q for q in quest_manager.available_quests.values()
                         if q.assigned_npc == npc_id and not q.is_accepted]
-    completable_quests = [q for q in quest_manager.active_quests 
-                          if q.assigned_npc == npc_id and q.is_completed]
+    completable_quests = [q for q in quest_manager.active_quests
+                        if q.assigned_npc == npc_id and q.is_completed]
 
     while True:
         clear_screen()
@@ -83,7 +84,7 @@ def handle_quest_interaction(npc_id: str, hero: Hero) -> None:
         elif choice == "c":
             break
 
-def talk_to_npc(hero):
+def talk_to_npc(hero, game_time):
     from ui_helpers import clear_screen
     from location_manager import LocationManager
     from npc_manager import NPCManager
@@ -96,8 +97,17 @@ def talk_to_npc(hero):
         print("There is no one to talk to here.")
         input("Press Enter to return...")
         return
-    print("People here:")
-    npc_list = location["npcs"]
+    print("Characters here:")
+    if "enemy_spawns" in location:
+        spawn_manager = lm.spawn_managers.get(hero.current_location)
+        if spawn_manager:
+
+            wolf_count = spawn_manager.current_spawns.get("npc_wolf", 0)
+            npc_list = ["npc_wolf"] * wolf_count
+        else:
+            npc_list = location.get("npcs", [])
+    else:
+        npc_list = location.get("npcs", [])
     for idx, npc_id in enumerate(npc_list, start=1):
         npc_name = npc_m.get_npc_name(npc_id)
         print(f"{idx}. {npc_name}")
@@ -113,12 +123,43 @@ def talk_to_npc(hero):
         return
     chosen_npc_id = npc_list[int(choice) - 1]
     npc_data = npc_m.get_npc_data(chosen_npc_id)
+    if npc_data.get("attitude", "").lower() == "hostile":
+        clear_screen()
+        print(f"{npc_m.get_npc_name(chosen_npc_id)} is hostile!")
+        print("1. Attack")
+        print("0. Return")
+        hostile_choice = input("Choose an option: ").strip().lower()
+        if hostile_choice == "1":
+            enemy = type("Enemy", (), {})()
+            enemy.name = npc_data.get("name", chosen_npc_id)
+            enemy.health = npc_data.get("health", 50)
+            enemy.max_health = npc_data.get("health", 50)
+            enemy.stamina = npc_data.get("stamina", 50)
+            enemy.max_stamina = npc_data.get("stamina", 50)
+            enemy.attack = npc_data.get("attack", 10)
+            enemy.xp_reward = npc_data.get("xp_reward", 100)
+            enemy.gold_reward = npc_data.get("gold_reward", 10)
+            enemy.drop_chance = npc_data.get("drop_chance", 0.3)
+            enemy.drop_item = npc_data.get("drop_item", None)
+            enemy.emoji = npc_data.get("emoji", "❓")
+
+            import os, json
+            with open(os.path.join(os.path.dirname(__file__), "../JSON/attacks.json"), "r", encoding="utf-8") as f:
+                attack_data = json.load(f)
+            from battle_system import Battle
+            battle = Battle(hero, enemy, attack_data, game_time)
+            result = battle.run()
+            if result == "lost":
+                print("You have been defeated. Returning to Darkwood Forest...")
+                hero.current_location = "loc_darkwood_forest"
+        return
+
     dialogues = Dialog.load_dialogues()
     npc_dialogues = dialogues.get(npc_data.get("dialogue_id"), {})
     branch = "greeting"
     branch_data = npc_dialogues.get(branch, {})
     from character import NPC
-    npc = NPC(npc_data["name"], 100, 100, 10, 1, None, npc_dialogues, npc_id=chosen_npc_id)
+    npc = NPC(npc_data.get("name", chosen_npc_id), 100, 100, 10, 1, None, npc_dialogues, npc_id=chosen_npc_id)
     speaker_npc = npc_m.get_npc_name(chosen_npc_id)
     speaker_hero = hero.name
     quest_log = hero.quest_log

@@ -38,8 +38,12 @@ def create_new_game() -> Hero:
 
     hero = Hero(hero_name, 100, 100, 10, 0, background, hero_inventory)
     hero.current_location = start_location_id
+    hero.current_building = None
+    hero.emoji = "👨"
     hero.addToBackpack(all_items["Healing Potion"], quantity=5)
     hero.addToBackpack(all_items["Wooden Sword"], quantity=1)
     
     hero.quest_log.start_quest("quest_healer_request")
+    input("Press Enter to continue...")
+    
     return hero

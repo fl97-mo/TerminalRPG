@@ -23,12 +23,12 @@ class Character:
     def showStats(self) -> None:
         hero_formatted = Colors.color_text(self.name, color_name="Cyan", style_names="Bold")
         print(f"Name:    {hero_formatted}\n"
-              f"Level:   {self.level}\n"
-              f"XP:      {self.current_xp}/{self.next_level_xp}\n"
-              f"Guild:   {self.guild}\n"
-              f"Health:  {self.health} HP\n"
-              f"Stamina: {self.stamina} SP\n"
-              f"Attack:  {self.attack} AP\n") 
+            f"Level:   {self.level}\n"
+            f"XP:      {self.current_xp}/{self.next_level_xp}\n"
+            f"Guild:   {self.guild}\n"
+            f"Health:  {self.health} HP\n"
+            f"Stamina: {self.stamina} SP\n"
+            f"Attack:  {self.attack} AP\n")
 
 class Hero(Character):
     def __init__(self, name: str, health: int, stamina: int, attack: int, level: int, guild: str, inventory: dict):
@@ -72,7 +72,6 @@ class Hero(Character):
         self.base_attack += 2
         self.recalcStats()
 
- 
     def recalcStats(self) -> None:
         total_attack = self.base_attack
         total_health_bonus = 0
@@ -131,10 +130,10 @@ class Hero(Character):
 
     def showInventory(self) -> None:
         print(f"HP: {self.health}/{self.max_health} | "
-              f"SP: {self.stamina} | "
-              f"Attack: {self.attack} | "
-              f"Level: {self.level} | "
-              f"Gold: {self.gold}")
+            f"SP: {self.stamina} | "
+            f"Attack: {self.attack} | "
+            f"Level: {self.level} | "
+            f"Gold: {self.gold}")
         eq_slots = [
             ("E1", "Head"),
             ("E2", "Armor"),

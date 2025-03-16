@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 class AsciiMap:
     THEMES = {
         "temperate forest": {
-            "T": ("Olive", "Forest Green BG", None),        # trees
+            "T": ("Olive", "Forest Green BG", None),           # trees
             "#": ("Bright Green", "Forest Green BG", None),    # bushes
             "X": ("Red", "Forest Green BG", None),             # tent
             "~": ("Bright Blue", "Bright Cyan BG", None),      # river
@@ -16,7 +16,9 @@ class AsciiMap:
             "╝": ("Light Gray", "Forest Green BG", None),      # street w-n
             "╔": ("Light Gray", "Forest Green BG", None),      # street s-e
             "║": ("Light Gray", "Forest Green BG", None),      # street s-n
-            "≡": ("Peru", "Sienna BG", None)                   # bridge w-e
+            "≡": ("Peru", "Sienna BG", None),                  # bridge w-e
+            "╗": ("Light Gray", "Forest Green BG", None),      # street w-s
+            "╚": ("Light Gray", "Forest Green BG", None)       # street n-e
         },
         "temperate forest tent": {
             "Ø": ("Coral", "Forest Green BG", None),           # Fire
@@ -32,14 +34,14 @@ class AsciiMap:
             "╗": ("Beige", "Forest Green BG", None),           # Tent
             "╚": ("Beige", "Forest Green BG", None),           # Tent
             ".": ("Plum", "Forest Green BG", None),            # Flower purple
-            ",": ("White", "Forest Green BG", None),           # flower red    
+            ",": ("White", "Forest Green BG", None),           # flower red
             "*": ("Bright Yellow", "Forest Green BG", None),   # flower yellow
             "¶": ("White", "Forest Green BG", None),           # bed1
-            "_": ("White", "Forest Green BG", None),           # bed2         
-            "h": ("Maroon", "Forest Green BG", None),          # chair in tent  
+            "_": ("White", "Forest Green BG", None),           # bed2
+            "h": ("Maroon", "Forest Green BG", None),          # chair in tent
             "¬": ("Maroon", "Forest Green BG", None),          # table in tent
-            "#": ("Bright Green", "Forest Green BG", None)     # bushes          
-        }        
+            "#": ("Bright Green", "Forest Green BG", None)     # bushes
+        }
 
     }
     

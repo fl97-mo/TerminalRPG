@@ -1,0 +1,32 @@
+{
+    "attacks": {
+      "standard": {
+        "id": "standard",
+        "name": "Regular Attack",
+        "base_damage": 10,
+        "stamina_cost": 5,
+        "description": "A quick attack."
+      },
+      "strong": {
+        "id": "timing",
+        "name": "Timed Attack",
+        "base_damage": 15,
+        "stamina_cost": 10,
+        "description": "Hit with precision to unleash greater force."
+      },
+      "special": {
+        "id": "keycount",
+        "name": "Charged Attack",
+        "base_damage": 20,
+        "stamina_cost": 15,
+        "description": "More force, more damage. It's that simple."
+      },
+      "ultimate": {
+        "id": "alphabet",
+        "name": "Attack Combo",
+        "base_damage": 25,
+        "stamina_cost": 20,
+        "description": "Precisely placed attacks are effective in combat."
+      }
+    }
+  }

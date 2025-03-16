@@ -1,14 +1,81 @@
-
-from ui_helpers import clear_screen, print_framed, print_three_column_screen
+from ui_helpers import clear_screen, print_three_column_screen, print_framed
 from manage_inventory import manage_inventory
 from dialog_menu import talk_to_npc
-from location_manager import LocationManager
+from location_manager import LocationManager, travel_to_neighbor
 from npc_manager import NPCManager
 from map_manager import MapManager
+import os
+import json
+from time_system import GameTime
+import textwrap
 from building_menu import enter_building
 
+def attack_enemy_in_location(hero):
+    from battle_system import Battle
+    lm = LocationManager()
+    npc_m = NPCManager()
+    current_location = lm.locations.get(hero.current_location, {})
+    hostile_npcs = []
+    
+    if "enemy_spawns" in current_location:
+        spawn_manager = lm.spawn_managers.get(hero.current_location)
+        if spawn_manager:
+            wolf_count = spawn_manager.current_spawns.get("npc_wolf", 0)
+            hostile_npcs.extend(["npc_wolf"] * wolf_count)
+    else:
+        if "npcs" in current_location:
+            for npc_id in current_location["npcs"]:
+                npc_data = npc_m.get_npc_data(npc_id)
+                if npc_data.get("attitude", "").lower() == "hostile":
+                    hostile_npcs.append(npc_id)
+    
+    if not hostile_npcs:
+        print("No hostile enemies in this location.")
+        input("Press Enter to continue...")
+        return
+    
+    print("Enemies in this location:")
+    for idx, npc_id in enumerate(hostile_npcs, start=1):
+        enemy_name = npc_m.get_npc_name(npc_id)
+        print(f"{idx}. {enemy_name}")
+    
+    choice = input("Select enemy to attack or press Enter to cancel: ").strip()
+    if not choice.isdigit():
+        return
+    idx = int(choice) - 1
+    if idx < 0 or idx >= len(hostile_npcs):
+        print("Invalid selection.")
+        input("Press Enter to continue...")
+        return
+    
+    selected_npc_id = hostile_npcs[idx]
+    npc_data = npc_m.get_npc_data(selected_npc_id)
+    enemy = type("Enemy", (), {})()
+    enemy.name = npc_data.get("name", selected_npc_id)
+    enemy.health = npc_data.get("health", 50)
+    enemy.max_health = npc_data.get("health", 50)
+    enemy.stamina = npc_data.get("stamina", 50)
+    enemy.max_stamina = npc_data.get("stamina", 50)
+    enemy.attack = npc_data.get("attack", 10)
+    enemy.xp_reward = npc_data.get("xp_reward", 100)
+    enemy.gold_reward = npc_data.get("gold_reward", 10)
+    enemy.drop_chance = npc_data.get("drop_chance", 0.3)
+    enemy.drop_item = npc_data.get("drop_item", None)
+    enemy.emoji = npc_data.get("emoji", "❓")
 
-def look_around(hero) -> None:
+    with open(os.path.join(os.path.dirname(__file__), "../JSON/attacks.json"), "r", encoding="utf-8") as f:
+        attack_data = json.load(f)
+    from time_system import GameTime
+    game_time = GameTime()
+    from battle_system import Battle
+    battle = Battle(hero, enemy, attack_data, game_time)
+    result = battle.run()
+    if result == "lost":
+        print("You have been defeated. Returning to Darkwood Forest...")
+        hero.current_location = "loc_darkwood_forest"
+        input("Press Enter to continue...")
+
+def look_around(hero):
     clear_screen()
     lm = LocationManager()
     npc_m = NPCManager()
@@ -32,140 +99,7 @@ def look_around(hero) -> None:
         print("Unknown location.")
     input("Press Enter to continue...")
 
-def open_game_menu(hero) -> None:
-    from ui_helpers import clear_screen, print_framed, print_three_column_screen
-    from building_menu import enter_building
-    from manage_inventory import manage_inventory
-    from dialog_menu import talk_to_npc
-    from location_manager import LocationManager
-    from npc_manager import NPCManager
-    from map_manager import MapManager
-    lm = LocationManager()
-    map_manager = MapManager()
-    while True:
-        clear_screen()
-        if hero.current_building:
-            left_lines = [
-                "1. Show Stats",
-                "2. Look around",
-                "3. Manage Inventory Items",
-                "4. Enter Building",
-                "5. Talk to NPC",
-                "6. Quest Log",
-                "Press Enter to return"
-            ]
-            middle_title = "Building"
-            b_info = lm.buildings.get(hero.current_building, {})
-            b_name = b_info.get("name", "Unknown Building")
-            b_desc = b_info.get("description", "No description provided.")
-            b_faction = b_info.get("faction", "Unknown")
-            b_type = b_info.get("type", "Unknown")
-            import textwrap
-            wrapped_desc = textwrap.wrap(f"Description: {b_desc}", width=40)
-            middle_lines = [
-                f"Faction: {b_faction}",
-                f"Type: {b_type}"
-            ]
-            middle_lines.extend(wrapped_desc)
-            map_id = b_info.get("map_id")
-            banner_line1 = ""
-            banner_line2 = ""
-            if b_name:
-                wrapped_banner = textwrap.wrap(b_name, width=30)
-                if wrapped_banner:
-                    banner_line1 = wrapped_banner[0]
-                    if len(wrapped_banner) > 1:
-                        banner_line2 = wrapped_banner[1]
-            if map_id:
-                ascii_map_obj = map_manager.create_ascii_map(map_id, banner_line1, banner_line2)
-                if ascii_map_obj:
-                    rendered = ascii_map_obj.draw_map()
-                    map_lines = rendered.split("\n")
-                else:
-                    map_lines = ["[Error loading Map]"]
-            else:
-                map_lines = ["No map available"]
-        else:
-            left_lines = [
-                "1. Show Stats",
-                "2. Look around",
-                "3. Manage Inventory Items",
-                "4. Enter Building",
-                "5. Talk to NPC",
-                "6. Quest Log",
-                "Press Enter to return"
-            ]
-            middle_title = "Location"
-            loc_info = lm.locations.get(hero.current_location, {})
-            loc_name = loc_info.get("name", "Unknown Location")
-            loc_desc = loc_info.get("description", "No description provided.")
-            loc_faction = loc_info.get("faction", "Unknown")
-            loc_type = loc_info.get("type", "Unknown")
-            import textwrap
-            wrapped_desc = textwrap.wrap(f"Description: {loc_desc}", width=40)
-            middle_lines = [
-                loc_name,
-                f"Faction: {loc_faction}",
-                f"Type: {loc_type}"
-            ]
-            middle_lines.extend(wrapped_desc)
-            map_id = loc_info.get("map_id")
-            banner_line1 = ""
-            banner_line2 = ""
-            if loc_name:
-                wrapped_banner = textwrap.wrap(loc_name, width=30)
-                if wrapped_banner:
-                    banner_line1 = wrapped_banner[0]
-                    if len(wrapped_banner) > 1:
-                        banner_line2 = wrapped_banner[1]
-            if map_id:
-                ascii_map_obj = map_manager.create_ascii_map(map_id, banner_line1, banner_line2)
-                if ascii_map_obj:
-                    rendered = ascii_map_obj.draw_map()
-                    map_lines = rendered.split("\n")
-                else:
-                    map_lines = ["[Error loading Map]"]
-            else:
-                map_lines = ["No Map available"]
-        print_three_column_screen(
-            left_lines,
-            middle_lines,
-            map_lines,
-            left_title="Game Menu",
-            middle_title=middle_title,
-            right_title="Map"
-        )
-        choice = input("Please select an option: ").strip().lower()
-        if choice == "":
-            confirm = input("Press Enter to confirm return or type 'c' to cancel: ").strip().lower()
-            if confirm == "":
-                break
-        elif choice == "1":
-            clear_screen()
-            hero.showStats()
-            input("Press Enter to continue...")
-        elif choice == "2":
-            from game_menu import look_around
-            look_around(hero)
-        elif choice == "3":
-            manage_inventory(hero)
-        elif choice == "4" and not hero.current_building:
-            from building_menu import enter_building
-            enter_building(hero)
-        elif choice == "5":
-            talk_to_npc(hero)
-        elif choice == "6":
-            from game_menu import open_quest_log
-            open_quest_log(hero)
-        elif choice == "x" and hero.current_building:
-            hero.current_building = None
-            print("You exit the building and return to the open area.")
-            input("Press Enter to continue...")
-        else:
-            print("Invalid option.")
-            input("Press Enter to continue...")
-
-def open_quest_log(hero) -> None:
+def open_quest_log(hero):
     from ui_helpers import clear_screen, print_framed
     while True:
         clear_screen()
@@ -206,17 +140,184 @@ def open_quest_log(hero) -> None:
         else:
             print("Invalid option.")
             input("Press Enter to continue...")
+def wait_turn_for_hero(hero, game_time):
+    import time
+    hours_input = input("How many hours do you want to wait? (1-24): ").strip()
+    try:
+        hours_to_wait = int(hours_input)
+        if hours_to_wait < 1 or hours_to_wait > 24:
+            print("Invalid number. Waiting for 1 hour by default.")
+            hours_to_wait = 1
+    except ValueError:
+        print("Invalid input. Waiting for 1 hour by default.")
+        hours_to_wait = 1
 
-def game_loop(hero) -> None:
-    clear_screen()
-    print("Type 'm' to open the game menu, or 'q' to quit.")
+    for i in range(hours_to_wait):
+        phase, current_time = game_time.wait_turn()
+        hero.heal(10)
+        print(f"Hour {i+1}/{hours_to_wait}: Now {phase}, time: {current_time}")
+        time.sleep(0.5)
+    input("Press Enter to continue...")
+
+
+
+def open_game_menu(hero, game_time):
+    lm = LocationManager()
+    current_loc_id = hero.current_location
+    map_manager = MapManager()
+    npc_m = NPCManager()
+
+    if current_loc_id in lm.spawn_managers:
+        current_round = game_time._calendar.day * 24 + game_time._calendar.hour
+        lm.spawn_managers[current_loc_id].update_spawns(current_round)
     while True:
-        command = input("Enter command: ").strip().lower()
+        clear_screen()
+        if hero.current_building:
+            left_lines = [
+                "1. Show Stats",
+                "2. Look around",
+                "3. Manage Inventory Items",
+                "4. Enter Building",
+                "5. Engage with NPCs",
+                "6. Quest Log",
+                "w  Wait one turn",
+                "",
+                "",
+                "Press Enter to return"
+            ]
+            middle_title = "Building"
+            b_info = lm.buildings.get(hero.current_building, {})
+            b_name = b_info.get("name", "Unknown Building")
+            b_desc = b_info.get("description", "No description provided.")
+            b_faction = b_info.get("faction", "Unknown")
+            b_type = b_info.get("type", "Unknown")
+            wrapped_desc = textwrap.wrap(f"Description: {b_desc}", width=40)
+            middle_lines = [
+                f"Faction: {b_faction}",
+                f"Type: {b_type}"
+            ]
+            middle_lines.extend(wrapped_desc)
+            map_id = b_info.get("map_id")
+            banner_line1 = ""
+            banner_line2 = ""
+            if b_name:
+                wrapped_banner = textwrap.wrap(b_name, width=30)
+                if wrapped_banner:
+                    banner_line1 = wrapped_banner[0]
+                    if len(wrapped_banner) > 1:
+                        banner_line2 = wrapped_banner[1]
+            if map_id:
+                ascii_map_obj = map_manager.create_ascii_map(map_id, banner_line1, banner_line2)
+                if ascii_map_obj:
+                    rendered = ascii_map_obj.draw_map()
+                    map_lines = rendered.split("\n")
+                else:
+                    map_lines = ["[Error loading Map]"]
+            else:
+                map_lines = ["No map available"]
+        else:
+            left_lines = [
+                "1. Show Stats",
+                "2. Look around",
+                "3. Manage Inventory Items",
+                "4. Enter Building",
+                "5. Engage with NPCs",
+                "6. Quest Log",
+                "7. Travel",
+                "w  Wait one turn",
+                ""
+            ]
+            left_lines.append("Press Enter to return")
+            middle_title = "Location"
+            loc_info = lm.locations.get(hero.current_location, {})
+            loc_name = loc_info.get("name", "Unknown Location")
+            loc_desc = loc_info.get("description", "No description provided.")
+            loc_faction = loc_info.get("faction", "Unknown")
+            loc_type = loc_info.get("type", "Unknown")
+            wrapped_desc = textwrap.wrap(f"Description: {loc_desc}", width=40)
+            middle_lines = [
+                loc_name,
+                f"Faction: {loc_faction}",
+                f"Type: {loc_type}"
+            ]
+            middle_lines.extend(wrapped_desc)
+            current_time_str = game_time._calendar.current_time()
+            middle_lines.append("")
+            middle_lines.append("")
+            middle_lines.append("")
+            middle_lines.append(f"Time: {current_time_str}")
+            map_id = loc_info.get("map_id")
+            banner_line1 = ""
+            banner_line2 = ""
+            if loc_name:
+                wrapped_banner = textwrap.wrap(loc_name, width=30)
+                if wrapped_banner:
+                    banner_line1 = wrapped_banner[0]
+                    if len(wrapped_banner) > 1:
+                        banner_line2 = wrapped_banner[1]
+            if map_id:
+                ascii_map_obj = map_manager.create_ascii_map(map_id, banner_line1, banner_line2)
+                if ascii_map_obj:
+                    rendered = ascii_map_obj.draw_map()
+                    map_lines = rendered.split("\n")
+                else:
+                    map_lines = ["[Error loading Map]"]
+            else:
+                map_lines = ["No Map available"]
+        print_three_column_screen(
+            left_lines,
+            middle_lines,
+            map_lines,
+            left_title="Game Menu",
+            middle_title=middle_title,
+            right_title="Map"
+        )
+        choice = input("Please select an option: ").strip().lower()
+        if choice == "":
+            confirm = input("Press Enter to confirm return or type 'c' to cancel: ").strip().lower()
+            if confirm == "":
+                break
+        elif choice == "1":
+            clear_screen()
+            hero.showStats()
+            input("Press Enter to continue...")
+        elif choice == "2":
+            look_around(hero)
+        elif choice == "3":
+            manage_inventory(hero)
+        elif choice == "4" and not hero.current_building:
+            enter_building(hero)
+        elif choice == "5":
+            talk_to_npc(hero, game_time)
+        elif choice == "6":
+            open_quest_log(hero)
+        elif choice == "7":
+            travel_to_neighbor(hero, game_time)
+        elif choice == "w":
+            wait_turn_for_hero(hero, game_time)
+            clear_screen()
+        elif choice == "x" and hero.current_building:
+            hero.current_building = None
+            print("You exit the building and return to the open area.")
+            input("Press Enter to continue...")
+        else:
+            print("Invalid option.")
+            input("Press Enter to continue...")
+
+def game_loop(hero):
+    game_time = GameTime()
+    clear_screen()
+    print("Type m to start the game or press q to quit.")
+    while True:
+        command = input("Command: ").strip().lower()
         if command == "m":
-            open_game_menu(hero)
+            open_game_menu(hero, game_time)
             clear_screen()
         elif command == "q":
-            print("Quitting game. Goodbye.")
+            print("Game closed, byebye!")
             break
         else:
-            print("Unknown command. Type 'm' for menu or 'q' to quit.")
+            print("Unknown command, press m or q.")
+
+
+

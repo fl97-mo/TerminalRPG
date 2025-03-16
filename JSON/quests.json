@@ -63,6 +63,37 @@
         ]
       },
       "status": "locked"
+    },
+    "quest_wolf_hunt": {
+      "name": "Hunt the Wolf",
+      "description": "Venture into the Darkwood Forest and defeat the hostile wolf.",
+      "objectives": [
+        {
+          "id": "defeat_wolf",
+          "description": "Defeat the wolf in the Darkwood Forest.",
+          "current": 0,
+          "required": 1
+        }
+      ],
+      "rewards": {
+        "gold": {
+          "min": 10,
+          "max": 15
+        },
+        "xp": 200,
+        "items": []
+      },
+      "unlock_conditions": {
+        "min_level": 1,
+        "dialogue_trigger": "ask_about_wolf"
+      },
+      "assigned_npc": "npc_wolf",
+      "dialogue_option": "I am ready to hunt the wolf.",
+      "trigger": {
+        "type": "combat",
+        "npc_id": "npc_wolf"
+      },
+      "status": "locked"
     }
   }
 }

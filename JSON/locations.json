@@ -1,20 +1,38 @@
 {
   "locations": {
     "loc_darkwood_clearing": {
-      "name": "Clearing in the green forest",
+      "name": "Clearing in the Dark Woods",
       "type": "Meadow",
       "buildings": ["tent_old_man"],
       "npcs": ["npc_old_man"],
       "player_start": true,
-      
       "faction": "Kingdom of Castellan",
       "description": "A serene meadow within the forest, known for its vibrant flowers and relaxing atmosphere.",
-      "map_id": "darkwood_clearing"
-    }
+      "map_id": "darkwood_clearing",
+      "neighbors": ["loc_darkwood_forest"]
+    },
+    "loc_darkwood_forest": {
+      "name": "Darkwood Forest",
+      "type": "Forest",
+      "buildings": [],
+      "npcs": ["npc_wolf"],
+      "player_start": false,
+      "faction": "Kingdom of Castellan",
+      "description": "A dense forest filled with towering trees and lurking dangers. The howls of wolves echo among the shadows.",
+      "map_id": "darkwood_forest",
+      "neighbors": ["loc_darkwood_clearing"],
+      "enemy_spawns": {
+          "npc_wolf": {
+              "initial": 4,
+              "max": 10,
+              "respawn_interval": 3,
+              "respawn_probability": 0.5
+          }
+      }
   },
   "buildings": {
     "tent_old_man": {
-      "name": "Old man's camp site",
+      "name": "Old Man's Camp Site",
       "type": "Tent",
       "faction": "Kingdom of Castellan",
       "description": "A small campsite with a worn tent and a faintly glowing campfire.",
@@ -24,10 +42,11 @@
     }
   },
   "containers": {
-      "chest_old_man": {
-        "id": "chest_old_man",
-        "name": "Worn Chest",
-        "contains": ["Wooden Sword", "Healing Potion"]
-      }
+    "chest_old_man": {
+      "id": "chest_old_man",
+      "name": "Worn Chest",
+      "contains": ["Wooden Sword", "Healing Potion"]
+    }
   }
+}
 }

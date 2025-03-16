@@ -1,4 +1,12 @@
 {
+  "Intro": {
+    "dialog": [
+      "I can still feel the heat of the flames and the echo of screams in the distance...",
+      "My village has been burned down, my parents—my father, a loyal subject of the old king, and my gentle mother—lost in the chaos of the Horde’s attack.",
+      "I ran into the forest, heart pounding and questions swirling: Was our king too weak? Was it betrayal or mere fate that led to our downfall?",
+      "Alone with my thoughts, I struggle to make sense of it all..."
+    ]
+  },
   "Old Man": {
     "1": {
       "dialog": [
@@ -12,16 +20,21 @@
         "Their horde swept through the kingdom like a storm, leaving ruin in their wake.",
         "Castelac stood tall, but even its mighty walls could not withstand the flames of war.",
         "The great kingdom shattered, its people scattered, its rulers slain or in hiding...",
-        "Now, law is but a memory—warlords, fallen nobles, and mercenaries fight for control.",
-        "The common folk suffer, hunger spreads, and crime festers in every ruined street.",
-        "Yet, some still whisper in the dark... of a time when a hero shall rise...",
+        "Now, law is but a memory—warlords, fallen nobles, mercenaries, and new powers vie for control.",
+        "In these troubled times, whispers speak not only of heroes but also of competing visions for the future:",
+        "   - A rightful heir who claims the throne with divine right.",
+        "   - A republic of the people seeking equality and self-rule.",
+        "   - A general whose iron hand promises order through military might.",
+        "   - Bandit lords—remnants of the Horde’s terror—who now rule by raw force.",
+        "   - And a young noble, daring to imagine a modern kingdom that bridges tradition and innovation.",
+        "Yet amidst all these competing voices, I sense that your own past holds secrets even deeper than these quarrels over power.",
         "Tell me, young traveler, what is your name?"
       ]
     },
     "2": {
       "dialog": [
         "Ah, it's a pleasure to meet you, {hero_name}...",
-        "May I ask, what humble background do your parents come from?"
+        "May I ask, what humble background do your parents come from? Was your father one of the loyal subjects of our old king, or did your roots lie in the common folk?"
       ],
       "options": [
         {
@@ -83,34 +96,36 @@
     },
     "greeting": {
       "dialog": [
-        "Ah, you're back, young adventurer. What is on your mind?"
+        "Ah, you're back, young adventurer. Tell me, have your thoughts deepened since we last spoke?",
+        "In these troubled times, the realm is torn apart by competing visions—a rightful heir with an ancient claim, a republic of the people, a military force imposing order, bandit lords born of chaos, and a young noble striving for a modern future.",
+        "Each faction offers its own truth. The choice is yours to ponder as you decide your own path."
       ],
       "options": [
         {
           "id": "advice",
-          "text": "Hello old man, do you have any advice for me?",
-          "reply": "My advice: Always seek the light in the darkness."
+          "text": "Old man, do you have any advice for me?",
+          "reply": "My advice: Seek not only answers in the words of others but also in the silence of your own thoughts."
         },
         {
           "id": "help",
-          "text": "Do you need help?",
-          "reply": "Actually, I have a task for you: Gather the items needed to protect our village.",
+          "text": "Do you have a task for me?",
+          "reply": "Indeed. I have a task: Gather the items needed to protect our village and perhaps find clues to the deeper truths of our time.",
           "followup": {
             "dialog": [
-              "When you're ready, accept the task and help me recover the lost treasures."
+              "When you are ready, accept this task and help me recover the lost treasures of our past."
             ],
             "quest": "quest_healer2_request"
           },
           "npc_followup": {
             "dialog": [
-              "Remember to return to me after completing the quest."
+              "Remember, young one: every item you recover may be a piece of the puzzle."
             ]
           }
         },
         {
           "id": "leave",
-          "text": "Leave",
-          "reply": ""
+          "text": "I must continue on my journey.",
+          "reply": "Then go forth, and let your choices shape the destiny of our shattered land."
         }
       ]
     }

@@ -29,7 +29,21 @@
           "      . ##       ,                ",
           "   ########                       "
         ]
-      }    
-    } 
+      },
+      "darkwood_forest": {
+        "theme": "temperate forest",
+        "data": [
+          "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+          "═══════════╗TTTTTTTTTTTTTTTTTTTTTT",
+          "TTTTTTTTT##║TTTTTTTTTTTTTTTTTTTTTT",
+          "TTTTTTT####║TTTTTTTTTTTTTTTTTTTTTT",
+          "TTTTTTT### ╚══════════════════════",
+          "TTTTTTTTTTTTTTT#TTTTT####..TTTTTTT",
+          "TTTTT##TTTTTTT#TTTTTTTTTTTTTTTTTTT",
+          "TTT##TTTTTT###TTTTTTTTTTTTTTTTTTTT",
+          "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
+        ]
+      }
+    }
   }
   
