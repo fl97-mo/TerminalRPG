@@ -16,7 +16,6 @@ def attack_enemy_in_location(hero):
     npc_m = NPCManager()
     current_location = lm.locations.get(hero.current_location, {})
     hostile_npcs = []
-    
     if "enemy_spawns" in current_location:
         spawn_manager = lm.spawn_managers.get(hero.current_location)
         if spawn_manager:
@@ -28,17 +27,14 @@ def attack_enemy_in_location(hero):
                 npc_data = npc_m.get_npc_data(npc_id)
                 if npc_data.get("attitude", "").lower() == "hostile":
                     hostile_npcs.append(npc_id)
-    
     if not hostile_npcs:
         print("No hostile enemies in this location.")
         input("Press Enter to continue...")
         return
-    
     print("Enemies in this location:")
     for idx, npc_id in enumerate(hostile_npcs, start=1):
         enemy_name = npc_m.get_npc_name(npc_id)
-        print(f"{idx}. {enemy_name}")
-    
+        print(str(idx) + ". " + enemy_name)
     choice = input("Select enemy to attack or press Enter to cancel: ").strip()
     if not choice.isdigit():
         return
@@ -47,7 +43,6 @@ def attack_enemy_in_location(hero):
         print("Invalid selection.")
         input("Press Enter to continue...")
         return
-    
     selected_npc_id = hostile_npcs[idx]
     npc_data = npc_m.get_npc_data(selected_npc_id)
     enemy = type("Enemy", (), {})()
@@ -62,12 +57,9 @@ def attack_enemy_in_location(hero):
     enemy.drop_chance = npc_data.get("drop_chance", 0.3)
     enemy.drop_item = npc_data.get("drop_item", None)
     enemy.emoji = npc_data.get("emoji", "❓")
-
     with open(os.path.join(os.path.dirname(__file__), "../JSON/attacks.json"), "r", encoding="utf-8") as f:
         attack_data = json.load(f)
-    from time_system import GameTime
     game_time = GameTime()
-    from battle_system import Battle
     battle = Battle(hero, enemy, attack_data, game_time)
     result = battle.run()
     if result == "lost":
@@ -81,13 +73,15 @@ def look_around(hero):
     npc_m = NPCManager()
     loc = lm.locations.get(hero.current_location, {})
     if loc:
-        print_framed(f"{loc.get('name', hero.current_location)} ({loc.get('type', 'Unknown')})")
+        print_framed(loc.get("name", hero.current_location) + " (" + loc.get("type", "Unknown") + ")")
+        if "enemy_spawns" in loc:
+            spawn_manager = lm.spawn_managers.get(hero.current_location)
+            for enemy_id, count in spawn_manager.current_spawns.items():
+                for _ in range(count):
+                    print(" - " + npc_m.get_npc_name(enemy_id))
         if loc.get("npcs"):
-            print("People here:")
             for npc in loc["npcs"]:
                 print(" - " + npc_m.get_npc_name(npc))
-        else:
-            print("Nobody is here.")
         if loc.get("buildings"):
             print("Buildings:")
             for building in loc["buildings"]:
@@ -119,12 +113,12 @@ def open_quest_log(hero):
                 print("No active quests.")
             else:
                 for idx, quest in enumerate(hero.quest_log.active_quests, start=1):
-                    print(f"{idx}. {quest.name}")
-                    print(f"   {quest.description}")
+                    print(str(idx) + ". " + quest.name)
+                    print("   " + quest.description)
                     print("   Objectives:")
                     for obj in quest.objectives:
-                        status = f"{obj.current}/{obj.required}" if not obj.completed else "Completed"
-                        print(f"   - {obj.description} [{status}]")
+                        status = str(obj.current) + "/" + str(obj.required) if not obj.completed else "Completed"
+                        print("   - " + obj.description + " [" + status + "]")
                     print()
             input("Press Enter to continue...")
         elif choice == "2":
@@ -134,12 +128,13 @@ def open_quest_log(hero):
                 print("No completed quests.")
             else:
                 for idx, quest in enumerate(hero.quest_log.completed_quests, start=1):
-                    print(f"{idx}. {quest.name}")
-                    print(f"   {quest.description}")
+                    print(str(idx) + ". " + quest.name)
+                    print("   " + quest.description)
             input("Press Enter to continue...")
         else:
             print("Invalid option.")
             input("Press Enter to continue...")
+
 def wait_turn_for_hero(hero, game_time):
     import time
     hours_input = input("How many hours do you want to wait? (1-24): ").strip()
@@ -151,22 +146,23 @@ def wait_turn_for_hero(hero, game_time):
     except ValueError:
         print("Invalid input. Waiting for 1 hour by default.")
         hours_to_wait = 1
-
+    from location_manager import LocationManager
+    lm = LocationManager()
     for i in range(hours_to_wait):
         phase, current_time = game_time.wait_turn()
+        if hero.current_location in lm.spawn_managers:
+            current_round = game_time._calendar.day * 24 + game_time._calendar.hour
+            lm.spawn_managers[hero.current_location].update_spawns(current_round)
         hero.heal(10)
-        print(f"Hour {i+1}/{hours_to_wait}: Now {phase}, time: {current_time}")
+        print("Hour " + str(i+1) + "/" + str(hours_to_wait) + ": Now " + phase + ", time: " + current_time)
         time.sleep(0.5)
     input("Press Enter to continue...")
-
-
 
 def open_game_menu(hero, game_time):
     lm = LocationManager()
     current_loc_id = hero.current_location
     map_manager = MapManager()
     npc_m = NPCManager()
-
     if current_loc_id in lm.spawn_managers:
         current_round = game_time._calendar.day * 24 + game_time._calendar.hour
         lm.spawn_managers[current_loc_id].update_spawns(current_round)
@@ -191,10 +187,10 @@ def open_game_menu(hero, game_time):
             b_desc = b_info.get("description", "No description provided.")
             b_faction = b_info.get("faction", "Unknown")
             b_type = b_info.get("type", "Unknown")
-            wrapped_desc = textwrap.wrap(f"Description: {b_desc}", width=40)
+            wrapped_desc = textwrap.wrap("Description: " + b_desc, width=40)
             middle_lines = [
-                f"Faction: {b_faction}",
-                f"Type: {b_type}"
+                "Faction: " + b_faction,
+                "Type: " + b_type
             ]
             middle_lines.extend(wrapped_desc)
             map_id = b_info.get("map_id")
@@ -224,28 +220,29 @@ def open_game_menu(hero, game_time):
                 "5. Engage with NPCs",
                 "6. Quest Log",
                 "7. Travel",
+                "8. Tech Tree",
                 "w  Wait one turn",
-                ""
+                "",
+                "Press Enter to return"
             ]
-            left_lines.append("Press Enter to return")
             middle_title = "Location"
             loc_info = lm.locations.get(hero.current_location, {})
             loc_name = loc_info.get("name", "Unknown Location")
             loc_desc = loc_info.get("description", "No description provided.")
             loc_faction = loc_info.get("faction", "Unknown")
             loc_type = loc_info.get("type", "Unknown")
-            wrapped_desc = textwrap.wrap(f"Description: {loc_desc}", width=40)
+            wrapped_desc = textwrap.wrap("Description: " + loc_desc, width=40)
             middle_lines = [
                 loc_name,
-                f"Faction: {loc_faction}",
-                f"Type: {loc_type}"
+                "Faction: " + loc_faction,
+                "Type: " + loc_type
             ]
             middle_lines.extend(wrapped_desc)
             current_time_str = game_time._calendar.current_time()
             middle_lines.append("")
             middle_lines.append("")
             middle_lines.append("")
-            middle_lines.append(f"Time: {current_time_str}")
+            middle_lines.append("Time: " + current_time_str)
             map_id = loc_info.get("map_id")
             banner_line1 = ""
             banner_line2 = ""
@@ -293,6 +290,10 @@ def open_game_menu(hero, game_time):
             open_quest_log(hero)
         elif choice == "7":
             travel_to_neighbor(hero, game_time)
+        elif choice == "8":
+            from tech_tree import TechTree
+            tech_tree = TechTree()
+            tech_tree.display_menu(hero)
         elif choice == "w":
             wait_turn_for_hero(hero, game_time)
             clear_screen()
@@ -318,6 +319,3 @@ def game_loop(hero):
             break
         else:
             print("Unknown command, press m or q.")
-
-
-

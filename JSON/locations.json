@@ -7,7 +7,7 @@
       "npcs": ["npc_old_man"],
       "player_start": true,
       "faction": "Kingdom of Castellan",
-      "description": "A serene meadow within the forest, known for its vibrant flowers and relaxing atmosphere.",
+      "description": "A serene meadow within the forest...",
       "map_id": "darkwood_clearing",
       "neighbors": ["loc_darkwood_forest"]
     },
@@ -18,7 +18,7 @@
       "npcs": ["npc_wolf"],
       "player_start": false,
       "faction": "Kingdom of Castellan",
-      "description": "A dense forest filled with towering trees and lurking dangers. The howls of wolves echo among the shadows.",
+      "description": "A dense forest filled with towering trees...",
       "map_id": "darkwood_forest",
       "neighbors": ["loc_darkwood_clearing"],
       "enemy_spawns": {
@@ -29,13 +29,14 @@
               "respawn_probability": 0.5
           }
       }
+    }
   },
   "buildings": {
     "tent_old_man": {
       "name": "Old Man's Camp Site",
       "type": "Tent",
       "faction": "Kingdom of Castellan",
-      "description": "A small campsite with a worn tent and a faintly glowing campfire.",
+      "description": "A small campsite with a worn tent...",
       "location": "loc_darkwood_clearing",
       "containers": ["chest_old_man"],
       "map_id": "darkwood_old_man_tent"
@@ -48,5 +49,4 @@
       "contains": ["Wooden Sword", "Healing Potion"]
     }
   }
-}
 }

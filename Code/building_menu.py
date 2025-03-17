@@ -76,11 +76,23 @@ def enter_building(hero) -> None:
         print("You are at an unknown location.")
         input("Press Enter to return...")
         return
-    location_buildings = [(b_id, b_info) for b_id, b_info in buildings_data.items() if b_info.get("location") == hero.current_location]
+
+    current_location = lm.locations[hero.current_location]
+    building_ids = current_location.get("buildings", [])
+    if not building_ids:
+        print("There are no buildings here.")
+        input("Press Enter to return...")
+        return
+
+    location_buildings = []
+    for b_id in building_ids:
+        if b_id in buildings_data:
+            location_buildings.append((b_id, buildings_data[b_id]))
     if not location_buildings:
         print("There are no buildings here.")
         input("Press Enter to return...")
         return
+
     print_framed("Buildings")
     for idx, (b_id, b_info) in enumerate(location_buildings, start=1):
         print(f"{idx}. {b_info.get('name', b_id)}")
@@ -99,16 +111,19 @@ def enter_building(hero) -> None:
         print("Invalid choice.")
         input("Press Enter to return...")
         return
+
     selected_building_id, selected_building = location_buildings[choice_num - 1]
     print("You entered " + selected_building.get("name", selected_building_id) + ".")
     input("Press Enter to continue...")
     hero.current_building = selected_building_id
+
     while True:
         clear_screen()
-        left_lines = []
-        left_lines.append("Containers in:")
-        left_lines.append(selected_building.get("name", "Unknown Building"))
-        left_lines.append("")
+        left_lines = [
+            "Containers in:",
+            selected_building.get("name", "Unknown Building"),
+            ""
+        ]
         container_ids = selected_building.get("containers", [])
         if container_ids:
             left_lines.append("You see:")
@@ -149,6 +164,7 @@ def enter_building(hero) -> None:
                 right_lines = ["[Error loading building map]"]
         else:
             right_lines = ["No map available"]
+
         print_three_column_screen(
             left_lines,
             middle_lines,
@@ -163,7 +179,6 @@ def enter_building(hero) -> None:
             print("You exit the building and return to the open area.")
             input("Press Enter to continue...")
             break
-
         if not c_choice.isdigit():
             print("Invalid choice.")
             input("Press Enter to return...")

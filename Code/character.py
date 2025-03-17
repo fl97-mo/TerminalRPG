@@ -6,6 +6,7 @@ from colors import Colors
 from npc_manager import NPCManager
 from dialog import Dialog
 from quest_manager import QuestManager
+
 ansi_escape_pattern = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
 
 def visible_length(text: str) -> int:
@@ -22,13 +23,14 @@ class Character:
 
     def showStats(self) -> None:
         hero_formatted = Colors.color_text(self.name, color_name="Cyan", style_names="Bold")
-        print(f"Name:    {hero_formatted}\n"
-            f"Level:   {self.level}\n"
-            f"XP:      {self.current_xp}/{self.next_level_xp}\n"
-            f"Guild:   {self.guild}\n"
-            f"Health:  {self.health} HP\n"
-            f"Stamina: {self.stamina} SP\n"
-            f"Attack:  {self.attack} AP\n")
+        print("Name:    " + hero_formatted)
+        print("Level:   " + str(self.level))
+        print("XP:      " + str(self.current_xp) + "/" + str(self.next_level_xp))
+        print("Guild:   " + self.guild)
+        print("Health:  " + str(self.health) + " HP")
+        print("Stamina: " + str(self.stamina) + " SP")
+        print("Attack:  " + str(self.attack) + " AP")
+
 
 class Hero(Character):
     def __init__(self, name: str, health: int, stamina: int, attack: int, level: int, guild: str, inventory: dict):
@@ -36,30 +38,30 @@ class Hero(Character):
         self.base_health = health
         self.base_stamina = stamina
         self.base_attack = attack
-
         self.max_health = self.base_health
         self.max_stamina = self.base_stamina
         self.health = self.base_health
         self.stamina = self.base_stamina
         self.attack = self.base_attack
-
         self.level = level
         self.guild = guild
         self.current_building = None
         self.inventory = inventory
         self.backpack = Backpack(capacity=20)
         self.gold = 50
+        self.tech_points = 0
         self.recalcStats()
         self.current_xp = 0
         self.next_level_xp = self.calculate_xp_requirement()
         self.quest_log = QuestManager()
+
     def calculate_xp_requirement(self):
         base_xp = 100
         return int(base_xp * (1.5 ** (self.level)))
 
     def add_xp(self, amount):
         self.current_xp += amount
-        print(f"Gained {amount} XP!")
+        print("Gained " + str(amount) + " XP!")
         while self.current_xp >= self.next_level_xp:
             self.level_up()
 
@@ -67,9 +69,13 @@ class Hero(Character):
         self.level += 1
         self.current_xp -= self.next_level_xp
         self.next_level_xp = self.calculate_xp_requirement()
-        print(f"New Level ({self.level}) reached!")
-        self.base_health += 10
-        self.base_attack += 2
+        self.tech_points += 1
+        print("New Level (" + str(self.level) + ") reached! You earned a tech point.")
+        invest = input("Do you want to invest your tech point now? (y/n): ").strip().lower()
+        if invest == "y":
+            from tech_tree import TechTree
+            tech_tree = TechTree()
+            tech_tree.display_menu(self)
         self.recalcStats()
 
     def recalcStats(self) -> None:
@@ -83,6 +89,8 @@ class Hero(Character):
 
         self.attack = total_attack
         self.max_health = self.base_health + total_health_bonus
+        self.max_stamina = self.base_stamina
+
         if self.health > self.max_health:
             self.health = self.max_health
 
@@ -94,9 +102,9 @@ class Hero(Character):
             heal_val = getattr(item, "heal_value", 0)
             if heal_val > 0:
                 self.heal(heal_val)
-                print(f"You consumed {item.name} and healed {heal_val} HP!")
+                print("You consumed " + item.name + " and healed " + str(heal_val) + " HP!")
             else:
-                print(f"You consumed {item.name} - no healing value found.")
+                print("You consumed " + item.name + " - no healing value found.")
         else:
             print("This item is not consumable!")
 
@@ -105,6 +113,7 @@ class Hero(Character):
 
     def removeFromBackpack(self, slot_index: int, quantity: int = 1) -> bool:
         return self.backpack.remove_item(slot_index, quantity)
+
 
     def equip_item(self, new_item, target_slot: str) -> bool:
         old_item = self.inventory.get(target_slot)

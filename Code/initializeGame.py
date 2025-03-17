@@ -37,7 +37,7 @@ def create_new_game() -> Hero:
     background = old_man.talk(2, hero_name=hero_name)
 
     hero = Hero(hero_name, 100, 100, 10, 0, background, hero_inventory)
-    hero.current_location = start_location_id
+    hero.current_location = "loc_darkwood_clearing"
     hero.current_building = None
     hero.emoji = "👨"
     hero.addToBackpack(all_items["Healing Potion"], quantity=5)

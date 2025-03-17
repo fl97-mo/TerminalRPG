@@ -1,7 +1,7 @@
 import json
 import os
 import logging
-import random
+
 logger = logging.getLogger(__name__)
 
 def load_json(filename: str) -> dict:
