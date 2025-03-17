@@ -25,9 +25,45 @@ The goal is to create an **interactive world** where players can:
 
 ## 🧾 Dev Diary
 
-### Day 5:
-- Improved Map drawing and peformance
-- Designed Location of "Old Man" for the intro and created a fitting theme
+### Day 5,6,7,8 and 9:
+
+### Combat system
+Implemented a the base for the combat system. Regular attacks or minigames can be used to deal damage.
+Damage is calculated based on the heros skills, items equipped and base damage from the attack itself.
+Its planned to be expanded in future.
+Enemies can spawn, be killed and respawn in defined locations. If an enemy is defeated, the hero earns Gold, XP and
+Items can drop.
+![Combat Screenshot](Screenshots/combat_system.png)
+
+### Quest system
+Quests can be accepted or declined. Quests give certain conditions, and if fullfilled, rewards the Hero.
+Quests have trigger condtions, example "Take x amount of y in z": - triggers defined within those.
+First quests to test are implemented as well.
+![Quest Screenshot](Screenshots/quests.png)
+
+### Time system
+A round based time system is implemented as well. Currently one round = 1 hour. Travelling from one place to another is 
+one round. Each in game hour passed, the hero recovers health and stamina points.
+The time system is based on a fictional one, so it has 15 months instead.
+![Time Screenshot](Screenshots/time.png)
+
+### Level system & Map
+If a character levels up, they get one Tech Point which they can invest (currently) in health, stamina or attack points.
+Tech points can stack, so after implementing a more advanced tech tree, the hero can decide if they save up the points, or invest it immediately. A hero can travel only to neighboring provinces.
+There will be probably many locations, so I decided to create a worldmap in inkarnate to create a simple overview.
+The already available locations are framed red here.
+![Time Screenshot](Screenshots/levels_and_map.png)
+
+Created:
+
+- **`battle_system.py`**:     Manages and simulates the battles.
+- **`quest_manager.py`**:     Handles quest and manages them.
+- **`quests.py`**:            Creating quest objects
+- **`tech_tree.py`**:         Current implementation of the tech tree.
+- **`time_system.py`**:       Handles ingame time, round-based.
+
+- **`attacks.json`**:         Defining attacks and their stats.
+- **`quests.json`**:          Defines quests and their conditions, rewards, etc..
 
 ### Day 4:
 

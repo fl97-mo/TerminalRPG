@@ -1,9 +1,8 @@
 from ui_helpers import clear_screen, print_framed
-from validations import get_validated_choice
+from ui_helpers import print_framed
 
 def open_backpack_menu(hero) -> None:
     while True:
-        from ui_helpers import clear_screen, print_framed
         clear_screen()
         hero.showInventory()
         print("Backpack Menu:")
@@ -45,7 +44,7 @@ def use_item_in_backpack(hero) -> None:
         return
     item = slot["item"]
     quantity = slot["quantity"]
-    from ui_helpers import print_framed
+
     print_framed("Item Info")
     item.inspect_Item()
     print("Quantity: " + str(quantity))

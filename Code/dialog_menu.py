@@ -1,12 +1,13 @@
 from ui_helpers import clear_screen, print_framed
 from location_manager import LocationManager
 from npc_manager import NPCManager
-from colors import Colors
-from validations import get_validated_choice
-from character import Hero, NPC
+from character import Hero
 from dialog import Dialog
-from ui_helpers import clear_screen, print_framed
 from battle_system import Battle
+from npc_manager import NPCManager
+from character import NPC
+import os
+import json
 
 def handle_quests(npc, hero, available_quests):
     clear_screen()
@@ -85,10 +86,6 @@ def handle_quest_interaction(npc_id: str, hero: Hero) -> None:
             break
 
 def talk_to_npc(hero, game_time):
-    from ui_helpers import clear_screen
-    from location_manager import LocationManager
-    from npc_manager import NPCManager
-    from dialog import Dialog
     lm = LocationManager()
     npc_m = NPCManager()
     Dialog.clear_screen()
@@ -143,10 +140,9 @@ def talk_to_npc(hero, game_time):
             enemy.drop_item = npc_data.get("drop_item", None)
             enemy.emoji = npc_data.get("emoji", "❓")
 
-            import os, json
             with open(os.path.join(os.path.dirname(__file__), "../JSON/attacks.json"), "r", encoding="utf-8") as f:
                 attack_data = json.load(f)
-            from battle_system import Battle
+
             battle = Battle(hero, enemy, attack_data, game_time)
             result = battle.run()
             if result == "lost":
@@ -158,7 +154,6 @@ def talk_to_npc(hero, game_time):
     npc_dialogues = dialogues.get(npc_data.get("dialogue_id"), {})
     branch = "greeting"
     branch_data = npc_dialogues.get(branch, {})
-    from character import NPC
     npc = NPC(npc_data.get("name", chosen_npc_id), 100, 100, 10, 1, None, npc_dialogues, npc_id=chosen_npc_id)
     speaker_npc = npc_m.get_npc_name(chosen_npc_id)
     speaker_hero = hero.name

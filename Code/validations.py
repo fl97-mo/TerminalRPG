@@ -6,7 +6,6 @@ def get_validated_name(prompt="Please enter your hero's name: ") -> str:
         elif not name.replace(" ", "").isalpha():
             print("The name must contain only alphabetical characters. Please try again.")
         else:
-
             name = " ".join(part.capitalize() for part in name.split())
             while True:
                 confirm = input(f"Are you sure you want to be called {name}? You won't be able to change it later (y/n): ").strip().lower()

@@ -1,10 +1,12 @@
 import time
 import sys
 import msvcrt
-import random
+import random, sys
 import os
+import string
+from item import ItemLoader
+from location_manager import LocationManager
 from colors import Colors
-
 class Battle:
     def __init__(self, hero, enemy, attack_data, game_time):
         self.hero = hero
@@ -44,7 +46,7 @@ class Battle:
             return options[0]
         return options[int(choice) - 1]
     def simulate_minigame(self):
-        import random, sys
+
         bar_length = 30
 
         def generate_random_color_pattern(total):
@@ -106,7 +108,6 @@ class Battle:
         return result_multiplier
 
     def simulate_typing_minigame(self):
-        import string
         letters = list(string.ascii_lowercase)
         letter1 = random.choice(letters)
         letter2 = random.choice(letters)
@@ -171,7 +172,6 @@ class Battle:
         return damage
 
     def alphabet_hero_attack(self):
-        import string, random
         success_count = 0
         letters = string.ascii_lowercase
         print("Type the target letters!")
@@ -275,7 +275,6 @@ class Battle:
             time.sleep(2)
             return "lost"
         elif self.enemy.health <= 0:
-            from location_manager import LocationManager
             print(f"You have defeated {self.enemy.name}!")
             self.handle_rewards()
             lm = LocationManager()
@@ -300,7 +299,6 @@ class Battle:
                 drop_item = getattr(self.enemy, "drop_item", None)
                 if drop_item:
                     print(f"You have obtained {drop_item}!")
-                    from item import ItemLoader
                     items = ItemLoader.load_items_from_json()
                     if drop_item in items:
                         self.hero.addToBackpack(items[drop_item])

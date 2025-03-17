@@ -4,14 +4,18 @@ from dialog_menu import talk_to_npc
 from location_manager import LocationManager, travel_to_neighbor
 from npc_manager import NPCManager
 from map_manager import MapManager
+from building_menu import enter_building
+from time_system import GameTime
+from battle_system import Battle
+from tech_tree import TechTree
+import time
 import os
 import json
-from time_system import GameTime
 import textwrap
-from building_menu import enter_building
+
 
 def attack_enemy_in_location(hero):
-    from battle_system import Battle
+
     lm = LocationManager()
     npc_m = NPCManager()
     current_location = lm.locations.get(hero.current_location, {})
@@ -94,7 +98,6 @@ def look_around(hero):
     input("Press Enter to continue...")
 
 def open_quest_log(hero):
-    from ui_helpers import clear_screen, print_framed
     while True:
         clear_screen()
         print_framed("Quest Log")
@@ -136,7 +139,6 @@ def open_quest_log(hero):
             input("Press Enter to continue...")
 
 def wait_turn_for_hero(hero, game_time):
-    import time
     hours_input = input("How many hours do you want to wait? (1-24): ").strip()
     try:
         hours_to_wait = int(hours_input)
@@ -146,7 +148,7 @@ def wait_turn_for_hero(hero, game_time):
     except ValueError:
         print("Invalid input. Waiting for 1 hour by default.")
         hours_to_wait = 1
-    from location_manager import LocationManager
+
     lm = LocationManager()
     for i in range(hours_to_wait):
         phase, current_time = game_time.wait_turn()
@@ -291,7 +293,6 @@ def open_game_menu(hero, game_time):
         elif choice == "7":
             travel_to_neighbor(hero, game_time)
         elif choice == "8":
-            from tech_tree import TechTree
             tech_tree = TechTree()
             tech_tree.display_menu(hero)
         elif choice == "w":

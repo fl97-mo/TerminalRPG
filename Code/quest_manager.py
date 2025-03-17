@@ -1,7 +1,8 @@
 import json
 import os
 from quest import Quest
-
+from location_manager import LocationManager
+from npc_manager import NPCManager
 class QuestManager:
     def __init__(self):
         self.active_quests = []
@@ -53,8 +54,6 @@ class QuestManager:
             hero.addToBackpack(item)
 
     def check_triggers(self, trigger_type, hero, **kwargs):
-        from location_manager import LocationManager
-        from npc_manager import NPCManager
         lm = LocationManager()
         nm = NPCManager()
         for quest in self.active_quests:

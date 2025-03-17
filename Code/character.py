@@ -1,4 +1,5 @@
 import re
+from tech_tree import TechTree
 from validations import get_validated_choice
 from backpack import Backpack
 from item import get_rarity_color, RESET_COLOR
@@ -73,7 +74,6 @@ class Hero(Character):
         print("New Level (" + str(self.level) + ") reached! You earned a tech point.")
         invest = input("Do you want to invest your tech point now? (y/n): ").strip().lower()
         if invest == "y":
-            from tech_tree import TechTree
             tech_tree = TechTree()
             tech_tree.display_menu(self)
         self.recalcStats()

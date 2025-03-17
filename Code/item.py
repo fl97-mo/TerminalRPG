@@ -1,7 +1,7 @@
 import json
 import os
 from typing import Dict
-from colors import Colors
+
 
 RARITY_COLORS: Dict[str, str] = {
     "common": "\033[90m",
@@ -32,7 +32,6 @@ class Item:
         print(f"{color_code}{self.icon} {self.name} ({self.rarity}){RESET_COLOR}\n"
               f"📜 {self.description}\n"
               f"💰 Value: {self.base_value} 🪙\n")
-
 class Consumable(Item):
     def __init__(self, icon: str, name: str, description: str, rarity: str, base_value: float,
                  stackable: bool = True, stack_limit: int = 64, equip_slots=None, heal_value: int = 0):
@@ -47,7 +46,6 @@ class Consumable(Item):
             print(f"It will heal {self.heal_value} HP.\n")
         else:
             print()
-
 class Weapon(Item):
     def __init__(self, icon: str, name: str, description: str, rarity: str, base_value: float,
                  attack_value: int, stackable: bool = True, stack_limit: int = 64, equip_slots=None):
@@ -57,7 +55,6 @@ class Weapon(Item):
     def inspect_Item(self) -> None:
         super().inspect_Item()
         print(f"⚔️ Attack Bonus: {self.attack_value} AP\n")
-
 class Shield(Item):
     def __init__(self, icon: str, name: str, description: str, rarity: str, base_value: float,
                 blocking_value: int, stackable: bool = True, stack_limit: int = 64, equip_slots=None):
@@ -67,7 +64,6 @@ class Shield(Item):
     def inspect_Item(self) -> None:
         super().inspect_Item()
         print(f"🛡 Defense Bonus: {self.blocking_value} DP\n")
-
 class Armor(Item):
     def __init__(self, icon: str, name: str, description: str, rarity: str, base_value: float,
                 health_bonus: int, stackable: bool = True, stack_limit: int = 64, equip_slots=None):
@@ -77,12 +73,10 @@ class Armor(Item):
     def inspect_Item(self) -> None:
         super().inspect_Item()
         print(f"❤️ Health Bonus: {self.health_bonus} HP\n")
-
 class Legs(Armor):
     def __init__(self, icon: str, name: str, description: str, rarity: str, base_value: float,
                 health_bonus: int, stackable: bool = True, stack_limit: int = 64, equip_slots=None):
         super().__init__(icon, name, description, rarity, base_value, health_bonus, stackable, stack_limit, equip_slots)
-
 class ItemLoader:
     @staticmethod
     def load_items_from_json() -> Dict[str, Item]:

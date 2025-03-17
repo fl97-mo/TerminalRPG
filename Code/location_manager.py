@@ -1,6 +1,7 @@
 import json
 import os
 import logging
+from npc_manager import SpawnManager
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +34,6 @@ class LocationManager:
             self.spawn_managers = {}
             for loc_id, loc in self.locations.items():
                 if "enemy_spawns" in loc:
-                    from npc_manager import SpawnManager
                     self.spawn_managers[loc_id] = SpawnManager(loc)
             self._initialized = True
     def get_start_location(self) -> tuple:

@@ -4,8 +4,6 @@ from location_manager import LocationManager
 from item import ItemLoader
 from map_manager import MapManager
 
-
-
 def open_container(hero, container_info: dict, items_data: dict, container_id: str) -> None:
     clear_screen()
     print_framed("Opening " + container_info.get("name", "Unknown Container"))
@@ -63,10 +61,6 @@ def open_container(hero, container_info: dict, items_data: dict, container_id: s
             print_framed("Opening " + container_info.get("name", "Unknown Container"))
 
 def enter_building(hero) -> None:
-    from ui_helpers import clear_screen, print_framed, print_three_column_screen
-    from location_manager import LocationManager
-    from item import ItemLoader
-    from map_manager import MapManager
     lm = LocationManager()
     map_manager = MapManager()
     items_data = ItemLoader.load_items_from_json()
@@ -143,7 +137,6 @@ def enter_building(hero) -> None:
         middle_lines.append(b_name)
         middle_lines.append(f"Faction: {b_faction}")
         middle_lines.append(f"Type: {b_type}")
-        import textwrap
         desc_wrapped = textwrap.wrap(f"Description: {b_desc}", width=40)
         middle_lines.extend(desc_wrapped)
         right_lines = []
@@ -193,5 +186,4 @@ def enter_building(hero) -> None:
             print("No information about this container.")
             input("Press Enter to return...")
             continue
-        from building_menu import open_container
         open_container(hero, containers_data[container_id], items_data, container_id)
