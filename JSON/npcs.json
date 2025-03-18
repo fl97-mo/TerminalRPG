@@ -8,6 +8,43 @@
         "dialogue_id": "Old Man",
         "emoji": "🧓"
       },
+        
+      "wolfram_gruenwald": {
+        "name": "Wolfram Grünwald",
+        "role": "Farmer",
+        "attitude": "Neutral",
+        "dialogue_id": "Wolfram Grünwald",
+        "emoji": "👨‍🌾"
+      },
+      "hildegard_gruenwald": {
+        "name": "Hildegard Grünwald",
+        "role": "Farmer",
+        "attitude": "Neutral",
+        "dialogue_id": "Hildegard Grünwald",
+        "drop_item": "Healing Potion",
+        "emoji": "👩"
+      },
+      "eberhard_gruenwald": {
+        "name": "Eberhard Grünwald",
+        "role": "Shopkeeper",
+        "attitude": "Neutral",
+        "dialogue_id": "Eberhard Grünwald",
+        "emoji": "👴"
+      },
+      "bertold_gruenwald": {
+        "name": "Bertold Grünwald",
+        "role": "Farmer",
+        "attitude": "Neutral",
+        "dialogue_id": "Bertold Grünwald",
+        "emoji": "🧑‍🌾"
+      },
+      "gertrud_gruenwald": {
+        "name": "Gertrud Grünwald",
+        "role": "Farmer",
+        "attitude": "Neutral",
+        "dialogue_id": "Gertrud Grünwald",
+        "emoji": "👩‍🌾"
+      },
       "npc_wolf": {
           "name": "Wolf",
           "attitude": "Hostile",

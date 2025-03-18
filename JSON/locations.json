@@ -11,6 +11,16 @@
       "map_id": "darkwood_clearing",
       "neighbors": ["loc_darkwood_forest"]
     },
+    "waldesruh_homestead": {
+      "name": "Waldesruh Homestead",
+      "type": "Fields",
+      "buildings": ["farmhouse_gruenwald", "barn_gruenwald"],
+      "npcs": ["wolfram_gruenwald","hildegard_gruenwald","eberhard_gruenwald","bertold_gruenwald","gertrud_gruenwald"],
+      "faction": "Kingdom of Castellan",
+      "description": "A peaceful farmstead nestled quietly at the edge of the forest, home to the Grünwald family. Fields of golden grain sway gently in the breeze.",
+      "map_id": "darkwood_clearing",
+      "neighbors": ["darkwood_forest"]
+    },
     "loc_darkwood_forest": {
       "name": "Darkwood Forest",
       "type": "Forest",
@@ -20,7 +30,7 @@
       "faction": "Kingdom of Castellan",
       "description": "A dense forest filled with towering trees...",
       "map_id": "darkwood_forest",
-      "neighbors": ["loc_darkwood_clearing"],
+      "neighbors": ["waldesruh_homestead","loc_darkwood_clearing"],
       "enemy_spawns": {
           "npc_wolf": {
               "initial": 4,
@@ -40,6 +50,24 @@
       "location": "loc_darkwood_clearing",
       "containers": ["chest_old_man"],
       "map_id": "darkwood_old_man_tent"
+    },
+    "farmhouse_gruenwald": {
+      "name": "Grünwald Farmhouse",
+      "type": "Farmhouse",
+      "faction": "Kingdom of Castellan",
+      "description": "A cozy timber farmhouse, modest yet sturdy, filled with the comforting scent of and dried herbs. The heart of the Grünwald family's daily life.",
+      "location": "waldesruh_homestead",
+      "containers": ["chest_farmhouse_gruenwald"],
+      "map_id": "darkwood_old_man_tent"
+    },
+    "barn_gruenwald": {
+      "name": "Grünwald Barn",
+      "type": "Barn",
+      "faction": "Kingdom of Castellan",
+      "description": "A sturdy barn that shelters the farm's animals.",
+      "location": "waldesruh_homestead",
+      "containers": ["barrel_barn_gruenwald"],
+      "map_id": "darkwood_old_man_tent"
     }
   },
   "containers": {
@@ -47,6 +75,16 @@
       "id": "chest_old_man",
       "name": "Worn Chest",
       "contains": ["Wooden Sword", "Healing Potion"]
-    }
+      },
+      "chest_farmhouse_gruenwald": {
+        "id": "chest_farmhouse_gruenwald",
+        "name": "Family Chest",
+        "contains": ["Healing Potion", "Wooden Shield"]
+      },
+      "barrel_barn_gruenwald": {
+        "id": "barrel_barn_gruenwald",
+        "name": "Old Barrel",
+        "contains": ["Healing Potion"]
+      }  
   }
 }
