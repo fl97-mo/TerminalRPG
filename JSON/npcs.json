@@ -26,7 +26,8 @@
       },
       "eberhard_gruenwald": {
         "name": "Eberhard Grünwald",
-        "role": "Shopkeeper",
+        "role": "shopkeeper",
+        "shop_id": "test_farmer",
         "attitude": "Neutral",
         "dialogue_id": "Eberhard Grünwald",
         "emoji": "👴"

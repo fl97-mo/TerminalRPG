@@ -1,0 +1,42 @@
+{
+    "shops": {
+      "test_farmer": {
+        "gold": 100, 
+        "refresh_interval": 24,
+        "items": [
+          {
+            "name": "Torn Leather Trousers",
+            "quantity": 10,
+            "chance": 1.0
+          },
+          {
+            "name": "Worn-out sandals",
+            "quantity": 1,
+            "chance": 0.8
+          },
+          {
+            "name": "Special Fertilizer",
+            "quantity": 2,
+            "chance": 0.2
+          }
+        ]
+      },
+      "milk_farmer": {
+        "gold": 80,
+        "refresh_interval": 48,
+        "items": [
+          {
+            "name": "Milk Bottle",
+            "quantity": 10,
+            "chance": 1.0
+          },
+          {
+            "name": "Cheese",
+            "quantity": 5,
+            "chance": 0.5
+          }
+        ]
+      }
+    }
+  }
+  

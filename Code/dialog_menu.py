@@ -6,6 +6,7 @@ from dialog import Dialog
 from battle_system import Battle
 from npc_manager import NPCManager
 from character import NPC
+from shop_manager import ShopManager, open_shop_menu
 import os
 import json
 
@@ -120,6 +121,8 @@ def talk_to_npc(hero, game_time):
         return
     chosen_npc_id = npc_list[int(choice) - 1]
     npc_data = npc_m.get_npc_data(chosen_npc_id)
+    role = npc_data.get("role", "")
+    shop_id = npc_data.get("shop_id", None)
     if npc_data.get("attitude", "").lower() == "hostile":
         clear_screen()
         print(f"{npc_m.get_npc_name(chosen_npc_id)} is hostile!")
@@ -176,6 +179,7 @@ def talk_to_npc(hero, game_time):
                 play_dialog(greeting_lines, speaker_npc)
             already_greeted = True
 
+
         all_options = branch_data.get("options", [])
         filtered_options = []
         for opt in all_options:
@@ -196,10 +200,17 @@ def talk_to_npc(hero, game_time):
         completable = [q for q in quest_log.active_quests if q.assigned_npc == chosen_npc_id and q.check_completion()]
         if completable:
             print("r. Claim Reward")
-
+        if role == "shopkeeper":
+            print("s. Open Shop")
         choice2 = input("Choose an option: ").strip().lower()
         if choice2 == "" or choice2 == "0":
             break
+        if choice2 == "s" and role == "shopkeeper":
+            shop_manager = ShopManager()  
+            shop_instance = shop_manager.get_shop(shop_id)
+            if shop_instance:
+                open_shop_menu(hero, shop_instance)
+            continue
         elif choice2 == "r" and completable:
             quest = completable[0]
             npc_location = "Unknown Location"

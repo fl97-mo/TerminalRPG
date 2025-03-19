@@ -11,6 +11,7 @@ from tech_tree import TechTree
 import time
 import os
 import json
+import subprocess
 import textwrap
 
 
@@ -179,8 +180,7 @@ def open_game_menu(hero, game_time):
                 "5. Engage with NPCs",
                 "6. Quest Log",
                 "w  Wait one turn",
-                "",
-                "",
+                "m  Open world map",
                 "Press Enter to return"
             ]
             middle_title = "Building"
@@ -224,7 +224,7 @@ def open_game_menu(hero, game_time):
                 "7. Travel",
                 "8. Tech Tree",
                 "w  Wait one turn",
-                "",
+                "m  Open world map",
                 "Press Enter to return"
             ]
             middle_title = "Location"
@@ -295,6 +295,8 @@ def open_game_menu(hero, game_time):
         elif choice == "8":
             tech_tree = TechTree()
             tech_tree.display_menu(hero)
+        elif choice == "m":
+            open_world_map()
         elif choice == "w":
             wait_turn_for_hero(hero, game_time)
             clear_screen()
@@ -320,3 +322,23 @@ def game_loop(hero):
             break
         else:
             print("Unknown command, press m or q.")
+import os
+import subprocess
+
+def open_world_map():
+    base_dir = os.path.dirname(__file__)
+    
+    image_path = os.path.join(base_dir, "..", "gfx", "world_map.jpg")
+
+    if not os.path.exists(image_path):
+        print(f"Error: world map not found.")
+        input("Press enter to return...")
+        return
+    if os.name == 'nt':
+        os.startfile(image_path)
+    else:
+        try:
+            subprocess.run(["open", image_path])
+        except:
+            subprocess.run(["xdg-open", image_path])
+
