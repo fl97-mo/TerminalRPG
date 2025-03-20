@@ -1,6 +1,7 @@
 import os
 import re
 import textwrap
+import wcwidth
 
 ANSI_ESCAPE_PATTERN = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
 
@@ -15,7 +16,15 @@ def print_framed(title: str) -> None:
     print("└" + "─" * (border_len - 2) + "┘")
 
 def visible_length(text: str) -> int:
-    return len(ANSI_ESCAPE_PATTERN.sub('', text))
+    text_no_ansi = ANSI_ESCAPE_PATTERN.sub('', text)
+    total_width = 0
+    for char in text_no_ansi:
+        w = wcwidth.wcwidth(char)
+        if w < 0:
+            w = 0
+        total_width += w
+
+    return total_width
 
 def pad_ansi_text(text: str, width: int) -> str:
     current_len = visible_length(text)

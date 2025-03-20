@@ -18,11 +18,14 @@ class AsciiMap:
             "║": ("Light Gray", "Forest Green BG", None),      # street s-n
             "≡": ("Peru", "Sienna BG", None),                  # bridge w-e
             "╗": ("Light Gray", "Forest Green BG", None),      # street w-s
-            "╚": ("Light Gray", "Forest Green BG", None)       # street n-e
+            "╚": ("Light Gray", "Forest Green BG", None),      # street n-e
+            "░": ("Khaki", "Chocolate BG", None),              # fields
+            "╬": ("Light Gray", "Forest Green BG", None),      # street cross
+            "E": ("Black", "Chocolate BG", None)               # street cross
         },
         "temperate forest tent": {
             "Ø": ("Coral", "Forest Green BG", None),           # Fire
-            "&": ("Khaki", "Forest Green BG", None),           # Old Man
+            "🧓": ("", "Forest Green BG", None),           # Old Man
             "¤": ("Gold", "Maroon BG", None),                  # chest lock
             "]": ("Chocolate", "Maroon BG", None),             # chest1
             " ": ("Mint", "Forest Green BG", None),            # grass
@@ -41,8 +44,28 @@ class AsciiMap:
             "h": ("Maroon", "Forest Green BG", None),          # chair in tent
             "¬": ("Maroon", "Forest Green BG", None),          # table in tent
             "#": ("Bright Green", "Forest Green BG", None)     # bushes
+        },
+        "wooden farm": {
+            "▓": ("Light Gray", "Forest Green BG", None),    # Road
+            "░": ("Gold", "Chocolate BG", None),             # Wooden floor
+            " ": ("Mint", "Forest Green BG", None),          # grass
+            "═": ("Maroon", "Chocolate BG", None),           # farm w-e
+            "╝": ("Maroon", "Chocolate BG", None),           # farm w-n
+            "╔": ("Maroon", "Chocolate BG", None),           # farm s-e
+            "║": ("Maroon", "Chocolate BG", None),           # farm s-n
+            "╗": ("Maroon", "Chocolate BG", None),           # farm
+            "╚": ("Maroon", "Chocolate BG", None),           # farm
+            "/": ("Maroon", "Chocolate BG", None),           # farm
+            "╦": ("Maroon", "Chocolate BG", None),           # farm
+            "╣": ("Maroon", "Chocolate BG", None),           # farm
+            "¶": ("White", "Chocolate BG", None),           # bed1
+            "_": ("White", "Chocolate BG", None),           # bed2
+            "h": ("Maroon", "Chocolate BG", None),          # chair in farm
+            "¬": ("Maroon", "Chocolate BG", None),          # table in farm
+            "👨‍🌾": ("", "Forest Green BG", None),          # table in farm           
+            "🧑‍🌾": ("", "Forest Green BG", None),          # table in farm
+            "🧓": ("", "Chocolate BG", None)          # table in farm                                           
         }
-
     }
     
     def __init__(self, map_data, theme="temperate forest") -> None:

@@ -19,11 +19,11 @@
         "theme": "temperate forest tent",
         "data": [
           "  *                    .          ",
-          "         ,                        ",
+          "          ,                       ",
           "             ╔═══════════════════╗",
           "             ║      [¤]          ║",
-          "     Ø &                         ║",
-          "             ║h¬              __¶║",
+          "     Ø         🧓                ║",
+          "             ║h ¬            ___¶║",
           "     .  *    ╚═══════════════════╝",
           "                     .    *       ",
           "      . ##       ,                ",
@@ -34,16 +34,64 @@
         "theme": "temperate forest",
         "data": [
           "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+          "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+          "TTTTTTTTT##TTTTTTTTTTTTTTTTTTTTTTT",
           "═══════════╗TTTTTTTTTTTTTTTTTTTTTT",
-          "TTTTTTTTT##║TTTTTTTTTTTTTTTTTTTTTT",
-          "TTTTTTT####║TTTTTTTTTTTTTTTTTTTTTT",
           "TTTTTTT### ╚══════════════════════",
           "TTTTTTTTTTTTTTT#TTTTT####..TTTTTTT",
           "TTTTT##TTTTTTT#TTTTTTTTTTTTTTTTTTT",
           "TTT##TTTTTT###TTTTTTTTTTTTTTTTTTTT",
+          "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
           "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
         ]
-      }
-    }
+      },
+      "waldesruh_homestead": {
+        "theme": "temperate forest",
+        "data": [
+          "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+          "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+          "═════════════════════════╗#TTTTTTT",
+          "                         ║#TTTT#TT",
+          "       ░░░░░░░░░░╔═══════╬════════",
+          "      ║░░░░░░░░░░║EEEEEE ║#TTTTTTT",
+          "  EEEE║░░░░░░░░░░║EEEEEE ║TTTTTTTT",
+          "  EEEE║░░░░░░░░░░║EEEEEE ║TTTTTTTT",
+          "  EEEE║░░░░░░░░░░║       ║ TTTTTTT",
+          "       ░░░░░░░░░░        ║  TTTTTT"
+        ]      
+      },
+      "gruenwald_farmhouse": {
+        "theme": "wooden farm",
+        "data": [
+          "      ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ ",
+          "      ▓▓▓ ╔════════╦══════════╗   ",
+          "      ▓▓▓ ║░░░░___¶║░░░░░░___¶║   ",
+          "  👨‍🌾🧑‍🌾  ▓▓▓ ║░░░░░/░░║░░░░░░/░░░║   ",
+          "      ▓▓▓ ╚══░░░═══╝═══░░░════╣   ",
+          "      ▓▓▓▓░/░░░░░░░░░░░🧓░░×┬×░║   ",
+          "      ▓▓▓ ║+░░👨‍🌾░░░░░░░░░░░×|×░║   ",
+          " 🧑‍🌾    ▓▓▓ ║0░░░░mmmm░░░░░░×┴×░║   ",
+          "      ▓▓▓ ╚═══════════════════╝   ",
+          "                                  "
+        ]      
+    },
+    "gruenwald_barn": {
+      "theme": "temperate forest",
+      "data": [
+        "                                  ",
+        "                                  ",
+        "                                  ",
+        "                                  ",
+        "                                  ",
+        "                                  ",
+        "                                  ",
+        "                                  ",
+        "                                  ",
+        "                                  "
+      ]      
   }
-  
+
+
+
+  }
+} 

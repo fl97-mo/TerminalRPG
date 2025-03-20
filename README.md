@@ -15,10 +15,13 @@ The goal is to create an **interactive world** where players can:
 1. Clone this repository:
    ```bash
    git clone https://github.com/fl97-mo/TerminalRPG.git
-2. Navigate to the project folder:
+2. Install requirements:
+   ```bash
+   pip install -r requirements.txt
+3. Navigate to the project folder:
    ```bash
    cd TerminalRPG
-3. Run the game:
+4. Run the game:
    ```bash
    python main.py
 

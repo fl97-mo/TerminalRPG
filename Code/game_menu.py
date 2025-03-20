@@ -224,8 +224,7 @@ def open_game_menu(hero, game_time):
                 "7. Travel",
                 "8. Tech Tree",
                 "w  Wait one turn",
-                "m  Open world map",
-                "Press Enter to return"
+                "m  Open world map"
             ]
             middle_title = "Location"
             loc_info = lm.locations.get(hero.current_location, {})
@@ -241,9 +240,6 @@ def open_game_menu(hero, game_time):
             ]
             middle_lines.extend(wrapped_desc)
             current_time_str = game_time._calendar.current_time()
-            middle_lines.append("")
-            middle_lines.append("")
-            middle_lines.append("")
             middle_lines.append("Time: " + current_time_str)
             map_id = loc_info.get("map_id")
             banner_line1 = ""
@@ -271,7 +267,7 @@ def open_game_menu(hero, game_time):
             middle_title=middle_title,
             right_title="Map"
         )
-        choice = input("Please select an option: ").strip().lower()
+        choice = input("Please select an option or 'enter' to return:  ").strip().lower()
         if choice == "":
             confirm = input("Press Enter to confirm return or type 'c' to cancel: ").strip().lower()
             if confirm == "":
