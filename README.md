@@ -1,6 +1,6 @@
 # 🏹 TerminalRPG 🏰
 👷‍♀️ **Under Construction!** 👷‍♂️  
-A terminal-based RPG adventure. Currently in development! 
+A terminal-based RPG adventure. Currently in development! (only on windows right now)
 
 ## About the Project
 TerminalRPG is a medieval **text-based role-playing game** that runs in the terminal.  
